@@ -14,17 +14,17 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ------------------ GLOBAL CSS FOR LANDING PAGE ------------------
+# ------------------ VIBRANT GLOBAL CSS ------------------
 st.markdown("""
 <style>
-    /* Hide Streamlit elements */
+    /* Hide default Streamlit elements */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display: none;}
 
-    /* Reset body */
+    /* Global Background */
     .stApp {
-        background: #F9F7F2;
+        background: #f0f4f8;
         font-family: 'Inter', 'Helvetica Neue', sans-serif;
     }
     .main .block-container {
@@ -35,10 +35,10 @@ st.markdown("""
 
     /* ----- NAVBAR (Sticky) ----- */
     .navbar {
-        background: rgba(255, 255, 255, 0.85);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(12px);
         padding: 0.8rem 2rem;
-        border-bottom: 1px solid #E5DCC5;
+        border-bottom: 1px solid #e2e8f0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -47,21 +47,19 @@ st.markdown("""
         z-index: 1000;
         margin-bottom: 2rem;
         border-radius: 0 0 20px 20px;
-        box-shadow: 0 4px 20px rgba(44,42,36,0.04);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
     }
     .navbar-brand {
         font-size: 1.6rem;
         font-weight: 800;
-        color: #1F4D3E;
+        color: #0f172a;
         text-decoration: none;
         display: flex;
         align-items: center;
         gap: 8px;
     }
     .navbar-brand span {
-        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #0d9488;
     }
     .nav-links {
         display: flex;
@@ -70,151 +68,222 @@ st.markdown("""
     }
     .nav-links a {
         text-decoration: none;
-        color: #2C2A24;
+        color: #334155;
         font-weight: 500;
         transition: color 0.2s;
     }
-    .nav-links a:hover {
-        color: #1F4D3E;
-    }
+    .nav-links a:hover { color: #0d9488; }
     .nav-cta {
-        background: #1F4D3E;
-        color: #F7F3EA !important;
+        background: #0d9488;
+        color: white !important;
         padding: 8px 20px;
         border-radius: 40px;
         font-weight: 600 !important;
     }
-    .nav-cta:hover {
-        background: #2E7D5B !important;
-        color: white !important;
-    }
+    .nav-cta:hover { background: #0f766e !important; color: white !important; }
 
     /* ----- HERO SECTION ----- */
     .hero {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 2rem 1rem 3rem 1rem;
+        padding: 1rem 0 2rem 0;
         gap: 2rem;
         flex-wrap: wrap;
-    }
-    .hero-left {
-        flex: 1;
-        min-width: 280px;
     }
     .hero-left h1 {
         font-size: 3.2rem;
         font-weight: 800;
-        color: #1F4D3E;
+        color: #0f172a;
         line-height: 1.1;
         margin-bottom: 0.5rem;
     }
-    .hero-left h1 .highlight {
-        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+    .hero-left h1 .highlight { color: #0d9488; }
     .hero-left p {
         font-size: 1.2rem;
-        color: #5A5448;
+        color: #475569;
         max-width: 500px;
-        margin-bottom: 2rem;
+        margin-bottom: 0;
     }
     .hero-right {
         flex: 0 0 200px;
         text-align: center;
-        background: #E1EDE6;
+        background: linear-gradient(135deg, #ccfbf1, #f0fdfa);
         padding: 2rem;
         border-radius: 30px;
-        border: 2px dashed #2E7D5B;
+        border: 2px solid #99f6e4;
         animation: float 4s ease-in-out infinite;
     }
-    .hero-right .big-robot {
-        font-size: 6rem;
-        display: block;
-        line-height: 1;
-    }
-    .hero-right .sub {
-        color: #1F4D3E;
-        font-weight: 600;
-        margin-top: 10px;
-    }
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-15px); }
-        100% { transform: translateY(0px); }
-    }
+    .hero-right .big-robot { font-size: 6rem; display: block; line-height: 1; }
+    .hero-right .sub { color: #0f766e; font-weight: 700; margin-top: 10px; }
+    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
 
-    /* ----- FEATURES SECTION ----- */
-    .features {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 2rem;
-        margin: 3rem 0;
-        padding: 1rem 0;
-    }
-    .feature-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 20px;
-        box-shadow: 0 8px 24px rgba(44,42,36,0.04);
-        border: 1px solid #E5DCC5;
-        text-align: center;
-        transition: transform 0.2s ease;
-    }
-    .feature-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 28px rgba(31, 77, 62, 0.08);
-    }
-    .feature-card .icon {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-    }
-    .feature-card h3 {
-        color: #1F4D3E;
-        margin: 0.5rem 0;
-    }
-    .feature-card p {
-        color: #6B6656;
-        font-size: 0.9rem;
-        margin: 0;
-    }
-
-    /* ----- TOOL SECTION (The actual app) ----- */
+    /* ----- TOOL CONTAINER (White Card) ----- */
     .tool-container {
         background: white;
         border-radius: 30px;
         padding: 2.5rem 2rem;
-        box-shadow: 0 20px 60px rgba(31, 77, 62, 0.08);
-        border: 1px solid #E5DCC5;
-        margin: 2rem 0 3rem 0;
+        box-shadow: 0 20px 60px rgba(13, 148, 136, 0.08);
+        border: 1px solid #e2e8f0;
+        margin: 2rem 0 2rem 0;
     }
     .tool-container h2 {
-        color: #1F4D3E;
+        color: #0f172a;
         text-align: center;
         margin-top: 0;
+        font-weight: 700;
     }
 
-    /* Progress bars & chips (already defined in previous versions) */
-    .custom-progress { height: 12px; border-radius: 10px; background: #EFE7D6; overflow: hidden; margin: 0.5rem 0 1rem 0; }
-    .custom-progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #1F4D3E, #2E7D5B); width: 0%; transition: width 0.8s ease; }
-    .match-score-number { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #1F4D3E, #2E7D5B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
-    .skill-chip-green { background: #E1EDE6; color: #1F4D3E; padding: 6px 14px; border-radius: 30px; display: inline-block; margin: 4px 6px 4px 0; font-size: 0.85rem; font-weight: 500; border: 1px solid #B9D9C7; }
-    .skill-chip-red { background: #F3E4D8; color: #8A4A2D; padding: 6px 14px; border-radius: 30px; display: inline-block; margin: 4px 6px 4px 0; font-size: 0.85rem; font-weight: 500; border: 1px solid #E3C2A8; }
-    .upload-card { background: #F9F7F2; padding: 1.5rem; border-radius: 16px; border: 1px solid #E5DCC5; height: 100%; }
-    .stButton button { background: linear-gradient(135deg, #1F4D3E 0%, #2E7D5B 100%); color: #F7F3EA !important; font-weight: 600 !important; border: none !important; border-radius: 12px !important; padding: 0.6rem 2rem !important; box-shadow: 0 4px 14px rgba(31, 77, 62, 0.35); width: 100%; }
-    .stButton button:hover { transform: scale(1.02); box-shadow: 0 8px 25px rgba(31, 77, 62, 0.5); }
-    .stRadio > div { display: flex; gap: 20px; background: #F9F7F2; padding: 10px 20px; border-radius: 40px; border: 1px solid #E5DCC5; }
-    .stRadio label[data-baseweb="radio"]:has(input:checked) { background: linear-gradient(135deg, #1F4D3E, #2E7D5B); color: #F7F3EA !important; border-radius: 30px; padding: 8px 20px; }
+    /* ----- UPLOAD CARDS (Vibrant) ----- */
+    .upload-card {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        height: 100%;
+        transition: border 0.3s ease;
+    }
+    .upload-card:hover { border-color: #0d9488; }
+
+    /* ----- RESULT CARDS (3-Column Layout) ----- */
+    .result-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.2fr;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    .card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.2rem 1.5rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        border: 1px solid #e2e8f0;
+        height: 100%;
+    }
+    .card-title {
+        font-weight: 700;
+        font-size: 1rem;
+        color: #0f172a;
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 2px solid #f1f5f9;
+        padding-bottom: 8px;
+    }
+    .card-title .badge {
+        background: #0d9488;
+        color: white;
+        font-size: 0.65rem;
+        padding: 2px 10px;
+        border-radius: 30px;
+    }
+    .skill-tag-green {
+        background: #dcfce7;
+        color: #166534;
+        padding: 4px 12px;
+        border-radius: 30px;
+        display: inline-block;
+        margin: 4px 6px 4px 0;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: 1px solid #bbf7d0;
+    }
+    .skill-tag-red {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 4px 12px;
+        border-radius: 30px;
+        display: inline-block;
+        margin: 4px 6px 4px 0;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: 1px solid #fecaca;
+    }
+    .skill-tag-neutral {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 4px 12px;
+        border-radius: 30px;
+        display: inline-block;
+        margin: 4px 6px 4px 0;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    .match-score-big {
+        font-size: 3.8rem;
+        font-weight: 800;
+        color: #0d9488;
+        line-height: 1;
+        text-align: center;
+        margin: 0.5rem 0;
+    }
+    .match-label {
+        text-align: center;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.9rem;
+    }
+    .custom-progress {
+        height: 10px;
+        border-radius: 10px;
+        background: #f1f5f9;
+        overflow: hidden;
+        margin: 0.5rem 0 0.2rem 0;
+    }
+    .custom-progress-fill {
+        height: 100%;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #0d9488, #14b8a6);
+        width: 0%;
+        transition: width 0.8s ease;
+    }
+    .divider-light { border-top: 1px solid #f1f5f9; margin: 1rem 0; }
+
+    /* Buttons & Inputs */
+    .stButton button {
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+        color: white !important;
+        font-weight: 600 !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 0.6rem 2rem !important;
+        box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
+        width: 100%;
+    }
+    .stButton button:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 25px rgba(13, 148, 136, 0.5);
+    }
+    .stRadio > div {
+        display: flex;
+        gap: 20px;
+        background: #f8fafc;
+        padding: 10px 20px;
+        border-radius: 40px;
+        border: 1px solid #e2e8f0;
+    }
+    .stRadio label[data-baseweb="radio"]:has(input:checked) {
+        background: #0d9488;
+        color: white !important;
+        border-radius: 30px;
+        padding: 8px 20px;
+    }
 
     /* Footer */
     .footer {
         text-align: center;
-        color: #6B6656;
+        color: #94a3b8;
         padding: 2rem 0 1rem 0;
-        border-top: 1px solid #E5DCC5;
+        border-top: 1px solid #e2e8f0;
         margin-top: 2rem;
         font-size: 0.8rem;
+    }
+
+    @media (max-width: 768px) {
+        .result-grid { grid-template-columns: 1fr; }
+        .hero { flex-direction: column; text-align: center; }
+        .hero-left h1 { font-size: 2.2rem; }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -261,9 +330,8 @@ def extract_text_from_pdf(uploaded_file):
     except:
         return ""
 
-# ------------------ LANDING PAGE HTML (Navbar, Hero, Features) ------------------
+# ------------------ LANDING PAGE (Nav, Hero) ------------------
 st.markdown("""
-<!-- NAVBAR -->
 <div class="navbar">
     <div class="navbar-brand">🔍 <span>AI SkillBridge</span></div>
     <div class="nav-links">
@@ -273,7 +341,6 @@ st.markdown("""
     </div>
 </div>
 
-<!-- HERO -->
 <div class="hero">
     <div class="hero-left">
         <h1>Find Your <span class="highlight">Perfect Match</span> with AI.</h1>
@@ -282,31 +349,12 @@ st.markdown("""
     <div class="hero-right">
         <div class="big-robot">🤖</div>
         <div class="sub">🔍 AI Scanning</div>
-        <div style="font-size:0.8rem; color:#5A5448;">Real-time analysis</div>
-    </div>
-</div>
-
-<!-- FEATURES -->
-<div class="features">
-    <div class="feature-card">
-        <div class="icon">📄</div>
-        <h3>Instant Parsing</h3>
-        <p>Reads your PDFs and extracts key skills in seconds.</p>
-    </div>
-    <div class="feature-card">
-        <div class="icon">🎯</div>
-        <h3>Skill Gap Analysis</h3>
-        <p>Matches your CV against the JD and highlights exactly what's missing.</p>
-    </div>
-    <div class="feature-card">
-        <div class="icon">👤</div>
-        <h3>Dual Perspectives</h3>
-        <p>Switch between Candidate (upskill) and Recruiter (hire) views.</p>
+        <div style="font-size:0.8rem; color:#64748b;">Real-time analysis</div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# ------------------ TOOL SECTION (The actual app) ------------------
+# ------------------ TOOL SECTION ------------------
 st.markdown('<div class="tool-container">', unsafe_allow_html=True)
 st.markdown('<h2>🚀 Live Demo: Try It Now</h2>', unsafe_allow_html=True)
 
@@ -356,89 +404,120 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                     cv_words = set(cv_cleaned.split())
                     matched = [skill for skill in required_skills if skill in cv_words]
                     missing = [skill for skill in required_skills if skill not in cv_words]
+                    
+                    mode_str = "Candidate" if "Candidate" in mode else "Recruiter"
 
-                    # --- RESULTS (First Row: Score + Skills) ---
                     st.markdown("---")
-                    res_col1, res_col2 = st.columns([1, 2])
-                    with res_col1:
-                        st.markdown(f"<div class='match-score-number'>{match_percentage}%</div>", unsafe_allow_html=True)
+                    st.markdown("### 📊 Analysis Dashboard")
+
+                    # ====================== 3-COLUMN GRID (Mockup Layout) ======================
+                    col_jd, col_cv, col_results = st.columns([1, 1, 1.2], gap="medium")
+
+                    # ----- COLUMN 1: JOB DESCRIPTION (Key Requirements) -----
+                    with col_jd:
+                        st.markdown("""
+                        <div class="card">
+                            <div class="card-title">📌 Job Description <span class="badge">Key Requirements</span></div>
+                        """, unsafe_allow_html=True)
+                        if required_skills:
+                            for skill in required_skills[:7]:
+                                st.markdown(f'<span class="skill-tag-neutral">{skill}</span>', unsafe_allow_html=True)
+                        else:
+                            st.caption("No requirements extracted.")
+                        st.markdown('</div>', unsafe_allow_html=True)
+
+                    # ----- COLUMN 2: CANDIDATE CV -----
+                    with col_cv:
+                        st.markdown("""
+                        <div class="card">
+                            <div class="card-title">📄 Candidate CV <span class="badge">Your Profile</span></div>
+                            <p style="margin:0; font-weight:600; color:#0f172a; font-size:0.9rem;">✅ Skills Detected</p>
+                        """, unsafe_allow_html=True)
+                        if matched:
+                            for skill in matched[:10]:
+                                st.markdown(f'<span class="skill-tag-green">{skill}</span>', unsafe_allow_html=True)
+                        else:
+                            st.caption("No skills matched.")
+                        
+                        st.markdown("""
+                            <div style="margin-top:0.8rem; padding-top:0.8rem; border-top:1px solid #f1f5f9;">
+                            <p style="margin:0; font-weight:600; color:#0f172a; font-size:0.9rem;">📊 Profile Stats</p>
+                            <p style="margin:0; color:#475569; font-size:0.85rem;">Total skills analyzed: <strong>{}</strong></p>
+                            </div>
+                        """.format(len(cv_words)), unsafe_allow_html=True)
+                        st.markdown('</div>', unsafe_allow_html=True)
+
+                    # ----- COLUMN 3: SIMILARITIES + SCORE + GAPS -----
+                    with col_results:
+                        st.markdown("""
+                        <div class="card">
+                            <div class="card-title">⚡ Similarities & Gaps</div>
+                        """, unsafe_allow_html=True)
+                        
+                        # Matched (Similarities)
+                        st.markdown('<p style="margin:0; font-weight:600; color:#0f172a; font-size:0.85rem;">✅ Matched Skills</p>', unsafe_allow_html=True)
+                        if matched:
+                            for skill in matched[:5]:
+                                st.markdown(f'<span class="skill-tag-green">{skill}</span>', unsafe_allow_html=True)
+                        else:
+                            st.caption("None")
+                        
+                        # Match Score (Big Number)
                         st.markdown(f"""
-                        <div class="custom-progress">
-                            <div class="custom-progress-fill" style="width: {min(match_percentage, 100)}%;"></div>
+                        <div style="margin:0.5rem 0;">
+                            <div class="match-score-big">{match_percentage}%</div>
+                            <div class="match-label">Match Score</div>
+                            <div class="custom-progress">
+                                <div class="custom-progress-fill" style="width: {min(match_percentage, 100)}%;"></div>
+                            </div>
                         </div>
                         """, unsafe_allow_html=True)
-                        mode_str = "Candidate" if "Candidate" in mode else "Recruiter"
+                        
+                        # Verdict
                         if mode_str == "Candidate":
-                            if match_percentage >= 80: st.success("🌟 Excellent Match!")
+                            if match_percentage >= 80: st.success("🌟 Excellent Fit!")
                             elif match_percentage >= 50: st.info("📈 Good Foundation")
-                            else: st.warning("🔄 Consider Upskilling")
+                            else: st.warning("🔄 Gaps Detected")
                         else:
                             if match_percentage >= 70: st.success("📞 Shortlist")
                             elif match_percentage >= 40: st.warning("🧐 Review")
                             else: st.error("❌ Reject")
-
-                    with res_col2:
-                        st.markdown(f"**✅ Matched Skills ({len(matched)})**")
-                        match_html = "".join([f"<span class='skill-chip-green'>{s}</span>" for s in matched]) if matched else "None"
-                        st.markdown(match_html, unsafe_allow_html=True)
-                        st.markdown(f"**❌ Missing Skills ({len(missing)})**")
-                        miss_html = "".join([f"<span class='skill-chip-red'>{s}</span>" for s in missing]) if missing else "None"
-                        st.markdown(miss_html, unsafe_allow_html=True)
-
-                    st.markdown("---")
-
-                    # --- RESULTS (Second Row: AI Robot + BULLETPROOF HTML ADVICE) ---
-                    advice_col1, advice_col2 = st.columns([1, 3], gap="medium")
-
-                    with advice_col1:
-                        st.markdown("""
-                        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(31,77,62,0.03); border-radius:20px; padding:15px; border:1px dashed #2E7D5B; height:100%; min-height:180px;">
-                            <div style="font-size:4rem; animation:float 3s ease-in-out infinite;">🤖</div>
-                            <div style="font-size:1.5rem; animation:resume-sway 3s ease-in-out infinite; margin-top:-10px;">📄</div>
-                            <div style="background:#E1EDE6; padding:4px 14px; border-radius:30px; font-weight:600; color:#1F4D3E; font-size:0.75rem; margin-top:5px;">🔍 AI Scanning</div>
-                        </div>
-                        """, unsafe_allow_html=True)
-
-                    with advice_col2:
+                        
+                        st.divider()
+                        
+                        # Skill Gaps (Missing)
+                        st.markdown('<p style="margin:0; font-weight:600; color:#0f172a; font-size:0.85rem;">❌ Skill Gaps</p>', unsafe_allow_html=True)
                         if missing:
-                            # Build the list items as pure HTML string
-                            list_items = ""
-                            for idx, skill in enumerate(missing[:7], start=1):
-                                list_items += f"""
-                                <li style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F0EBE0;">
-                                    <span style="background: #1F4D3E; color: #F7F3EA; font-weight: 700; font-size: 0.75rem; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0;">{idx}</span>
-                                    <span style="flex: 1; color: #2C2A24; font-size: 0.9rem;">Gap detected in <strong>'{skill}'</strong></span>
-                                    <span style="background: #F3E4D8; color: #8A4A2D; padding: 2px 12px; border-radius: 30px; font-weight: 500; font-size: 0.75rem; white-space: nowrap;">Priority {idx}</span>
-                                </li>
-                                """
-
-                            if mode_str == "Candidate":
-                                title = "📌 Personalized Upskilling Plan"
-                                action_msg = "📚 Consider taking relevant courses or building projects to bridge these gaps."
-                            else:
-                                title = "📌 Hiring Recommendation (Skill Gaps)"
-                                action_msg = "🧐 Verify if these missing skills are strictly required for the role."
-
-                            # Build the FULL HTML document for the iframe
-                            advice_html = f"""
-                            <div style="background: #FFFFFF; border-radius: 16px; padding: 1.2rem 1.8rem; border-left: 6px solid #2E7D5B; box-shadow: 0 8px 24px rgba(31, 77, 62, 0.08); height: 100%; min-height: 180px; display: flex; flex-direction: column; justify-content: center;">
-                                <h4 style="color: #1F4D3E; font-weight: 700; margin-top: 0; margin-bottom: 10px; font-size: 1.1rem;">{title}</h4>
-                                <ul style="list-style: none; padding: 0; margin: 0;">
-                                    {list_items}
-                                </ul>
-                                <div style="margin-top: 12px; font-size: 0.9rem; color: #1F4D3E; background: #E1EDE6; padding: 8px 16px; border-radius: 30px; display: inline-block; font-weight: 500; align-self: flex-start;">💡 {action_msg}</div>
-                            </div>
-                            """
-                            # RENDER USING st.components.v1.html (100% bulletproof, no Markdown interference!)
-                            st.components.v1.html(advice_html, height=280)
+                            for skill in missing[:5]:
+                                st.markdown(f'<span class="skill-tag-red">{skill}</span>', unsafe_allow_html=True)
+                            if len(missing) > 5:
+                                st.caption(f"+ {len(missing) - 5} more gaps...")
                         else:
-                            perfect_html = """
-                            <div style="background: #FFFFFF; border-radius: 16px; padding: 1.2rem 1.8rem; border-left: 6px solid #4CAF50; box-shadow: 0 8px 24px rgba(31, 77, 62, 0.08); height: 100%; min-height: 180px; display: flex; flex-direction: column; justify-content: center;">
-                                <h4 style="color: #1F4D3E; font-weight: 700; margin-top: 0; font-size: 1.1rem;">🎯 Verdict</h4>
-                                <p style="font-size:1.1rem; font-weight:500; color:#1F4D3E; margin:0;">🌟 Perfect Match! You cover all the key requirements. Proceed with confidence!</p>
-                            </div>
-                            """
-                            st.components.v1.html(perfect_html, height=180)
+                            st.caption("No gaps! Perfect match.")
+                        
+                        st.markdown('</div>', unsafe_allow_html=True)
+
+                    # ----- DYNAMIC ADVICE BANNER (Full width below the grid) -----
+                    st.markdown("---")
+                    if missing:
+                        # Build a nice advice banner
+                        if mode_str == "Candidate":
+                            advice_title = "📚 Personalized Upskilling Plan"
+                            action_msg = "💡 Consider taking relevant courses or building projects to bridge these gaps."
+                        else:
+                            advice_title = "🧐 Hiring Recommendation"
+                            action_msg = "💡 Verify if these missing skills are strictly required for the role."
+
+                        # Show a compact advice box
+                        adv_col1, adv_col2 = st.columns([1, 4])
+                        with adv_col1:
+                            st.markdown("#### 🤖")
+                        with adv_col2:
+                            st.info(f"**{advice_title}**  \n{action_msg}")
+                    else:
+                        st.balloons()
+                        st.success("🎉 **Perfect Match!** This candidate covers all key requirements. Proceed with confidence!")
+
                 else:
                     st.warning("Could not extract meaningful text.")
             else:
