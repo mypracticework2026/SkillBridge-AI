@@ -145,7 +145,7 @@ st.markdown("""
     }
     .upload-card:hover { border-color: #0d9488; }
 
-    /* ----- RESULT CARDS (3-Column Layout) ----- */
+    /* ----- RESULT CARDS (LARGER, DOTTED BORDER) ----- */
     .result-grid {
         display: grid;
         grid-template-columns: 1fr 1fr 1.2fr;
@@ -154,22 +154,25 @@ st.markdown("""
     }
     .card {
         background: white;
-        border-radius: 16px;
-        padding: 1.2rem 1.5rem;
+        border-radius: 20px;
+        padding: 1.8rem 1.5rem;  /* More padding for height */
         box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-        border: 1px solid #e2e8f0;
+        border: 3px dotted #0d9488;  /* Dotted teal border (matches Analyze button) */
         height: 100%;
+        min-height: 250px;  /* Makes the container much taller */
+        display: flex;
+        flex-direction: column;
     }
     .card-title {
         font-weight: 700;
-        font-size: 1rem;
+        font-size: 1.1rem;
         color: #0f172a;
         margin-bottom: 0.8rem;
         display: flex;
         align-items: center;
         gap: 8px;
         border-bottom: 2px solid #f1f5f9;
-        padding-bottom: 8px;
+        padding-bottom: 10px;
     }
     .card-title .badge {
         background: #0d9488;
@@ -181,34 +184,35 @@ st.markdown("""
     .skill-tag-green {
         background: #dcfce7;
         color: #166534;
-        padding: 4px 12px;
+        padding: 6px 14px;
         border-radius: 30px;
         display: inline-block;
         margin: 4px 6px 4px 0;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         font-weight: 600;
         border: 1px solid #bbf7d0;
     }
     .skill-tag-red {
         background: #fee2e2;
         color: #991b1b;
-        padding: 4px 12px;
+        padding: 6px 14px;
         border-radius: 30px;
         display: inline-block;
         margin: 4px 6px 4px 0;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         font-weight: 600;
         border: 1px solid #fecaca;
     }
     .skill-tag-neutral {
         background: #f1f5f9;
         color: #475569;
-        padding: 4px 12px;
+        padding: 6px 14px;
         border-radius: 30px;
         display: inline-block;
         margin: 4px 6px 4px 0;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         font-weight: 500;
+        border: 1px solid #e2e8f0;
     }
     .match-score-big {
         font-size: 3.8rem;
@@ -410,52 +414,55 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                     st.markdown("---")
                     st.markdown("### 📊 Analysis Dashboard")
 
-                    # ====================== 3-COLUMN GRID (Mockup Layout) ======================
+                    # ====================== 3-COLUMN GRID ======================
                     col_jd, col_cv, col_results = st.columns([1, 1, 1.2], gap="medium")
 
-                    # ----- COLUMN 1: JOB DESCRIPTION (Key Requirements) -----
+                    # ----- COLUMN 1: JOB DESCRIPTION -----
                     with col_jd:
                         st.markdown("""
                         <div class="card">
-                            <div class="card-title">📌 Job Description <span class="badge">Key Requirements</span></div>
+                            <div class="card-title">📌 Job Description <span class="badge">Requirements</span></div>
+                            <div style="flex:1;">
                         """, unsafe_allow_html=True)
                         if required_skills:
-                            for skill in required_skills[:7]:
+                            for skill in required_skills[:10]:
                                 st.markdown(f'<span class="skill-tag-neutral">{skill}</span>', unsafe_allow_html=True)
                         else:
                             st.caption("No requirements extracted.")
-                        st.markdown('</div>', unsafe_allow_html=True)
+                        st.markdown('</div></div>', unsafe_allow_html=True)
 
                     # ----- COLUMN 2: CANDIDATE CV -----
                     with col_cv:
                         st.markdown("""
                         <div class="card">
                             <div class="card-title">📄 Candidate CV <span class="badge">Your Profile</span></div>
-                            <p style="margin:0; font-weight:600; color:#0f172a; font-size:0.9rem;">✅ Skills Detected</p>
+                            <div style="flex:1;">
+                            <p style="margin:0 0 8px 0; font-weight:600; color:#0f172a; font-size:0.9rem;">✅ Skills Detected</p>
                         """, unsafe_allow_html=True)
                         if matched:
-                            for skill in matched[:10]:
+                            for skill in matched[:12]:
                                 st.markdown(f'<span class="skill-tag-green">{skill}</span>', unsafe_allow_html=True)
                         else:
                             st.caption("No skills matched.")
                         
-                        st.markdown("""
-                            <div style="margin-top:0.8rem; padding-top:0.8rem; border-top:1px solid #f1f5f9;">
+                        st.markdown(f"""
+                            <div style="margin-top:1rem; padding-top:0.8rem; border-top:1px solid #f1f5f9;">
                             <p style="margin:0; font-weight:600; color:#0f172a; font-size:0.9rem;">📊 Profile Stats</p>
-                            <p style="margin:0; color:#475569; font-size:0.85rem;">Total skills analyzed: <strong>{}</strong></p>
+                            <p style="margin:0; color:#475569; font-size:0.85rem;">Total skills analyzed: <strong>{len(cv_words)}</strong></p>
                             </div>
-                        """.format(len(cv_words)), unsafe_allow_html=True)
-                        st.markdown('</div>', unsafe_allow_html=True)
+                        """, unsafe_allow_html=True)
+                        st.markdown('</div></div>', unsafe_allow_html=True)
 
                     # ----- COLUMN 3: SIMILARITIES + SCORE + GAPS -----
                     with col_results:
                         st.markdown("""
                         <div class="card">
                             <div class="card-title">⚡ Similarities & Gaps</div>
+                            <div style="flex:1;">
                         """, unsafe_allow_html=True)
                         
                         # Matched (Similarities)
-                        st.markdown('<p style="margin:0; font-weight:600; color:#0f172a; font-size:0.85rem;">✅ Matched Skills</p>', unsafe_allow_html=True)
+                        st.markdown('<p style="margin:0 0 4px 0; font-weight:600; color:#0f172a; font-size:0.85rem;">✅ Matched Skills</p>', unsafe_allow_html=True)
                         if matched:
                             for skill in matched[:5]:
                                 st.markdown(f'<span class="skill-tag-green">{skill}</span>', unsafe_allow_html=True)
@@ -464,7 +471,7 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                         
                         # Match Score (Big Number)
                         st.markdown(f"""
-                        <div style="margin:0.5rem 0;">
+                        <div style="margin:0.8rem 0 0.5rem 0;">
                             <div class="match-score-big">{match_percentage}%</div>
                             <div class="match-label">Match Score</div>
                             <div class="custom-progress">
@@ -483,10 +490,10 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                             elif match_percentage >= 40: st.warning("🧐 Review")
                             else: st.error("❌ Reject")
                         
-                        st.divider()
+                        st.markdown('<div style="margin-top:0.8rem; border-top:1px solid #f1f5f9; padding-top:0.8rem;">', unsafe_allow_html=True)
                         
                         # Skill Gaps (Missing)
-                        st.markdown('<p style="margin:0; font-weight:600; color:#0f172a; font-size:0.85rem;">❌ Skill Gaps</p>', unsafe_allow_html=True)
+                        st.markdown('<p style="margin:0 0 4px 0; font-weight:600; color:#0f172a; font-size:0.85rem;">❌ Skill Gaps</p>', unsafe_allow_html=True)
                         if missing:
                             for skill in missing[:5]:
                                 st.markdown(f'<span class="skill-tag-red">{skill}</span>', unsafe_allow_html=True)
@@ -495,12 +502,11 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                         else:
                             st.caption("No gaps! Perfect match.")
                         
-                        st.markdown('</div>', unsafe_allow_html=True)
+                        st.markdown('</div></div></div>', unsafe_allow_html=True)
 
                     # ----- DYNAMIC ADVICE BANNER (Full width below the grid) -----
                     st.markdown("---")
                     if missing:
-                        # Build a nice advice banner
                         if mode_str == "Candidate":
                             advice_title = "📚 Personalized Upskilling Plan"
                             action_msg = "💡 Consider taking relevant courses or building projects to bridge these gaps."
@@ -508,7 +514,6 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                             advice_title = "🧐 Hiring Recommendation"
                             action_msg = "💡 Verify if these missing skills are strictly required for the role."
 
-                        # Show a compact advice box
                         adv_col1, adv_col2 = st.columns([1, 4])
                         with adv_col1:
                             st.markdown("#### 🤖")
