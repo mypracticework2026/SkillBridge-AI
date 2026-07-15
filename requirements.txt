@@ -1,0 +1,6 @@
+pdfplumber
+scikit-learn
+nltk
+pandas
+ipywidgets
+faker
