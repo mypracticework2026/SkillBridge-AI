@@ -14,9 +14,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ------------------ CUSTOM CSS (Streamlined) ------------------
+# ------------------ CUSTOM CSS (DEFINED ONCE, APPLIED GLOBALLY) ------------------
 st.markdown("""
 <style>
+    /* Hide default Streamlit elements */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display: none;}
@@ -31,7 +32,7 @@ st.markdown("""
         max-width: 1200px;
     }
 
-    /* Hero Section */
+    /* ----- HERO SECTION (Green box) ----- */
     .hero-container {
         background: linear-gradient(135deg, #1F4D3E 0%, #2E7D5B 100%);
         border-radius: 20px;
@@ -92,7 +93,7 @@ st.markdown("""
         100% { transform: rotate(10deg) translateY(0px); }
     }
 
-    /* Upload Cards */
+    /* ----- UPLOAD CARDS ----- */
     .upload-card {
         background: #FFFFFF;
         padding: 2rem 1.5rem;
@@ -142,6 +143,8 @@ st.markdown("""
         color: #F7F3EA !important;
         box-shadow: 0 4px 10px rgba(31, 77, 62, 0.3);
     }
+
+    /* ----- RESULTS CARD ----- */
     .result-card {
         background: #FFFFFF;
         padding: 1.5rem 2rem;
@@ -194,8 +197,8 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         line-height: 1;
     }
-    
-    /* Animated Robot */
+
+    /* ----- AI ROBOT (Left Column) ----- */
     .ai-robot-container {
         display: flex;
         flex-direction: column;
@@ -208,10 +211,100 @@ st.markdown("""
         height: 100%;
         min-height: 180px;
     }
-    .ai-robot { font-size: 4.5rem; animation: float 2.5s ease-in-out infinite; display: inline-block; }
+    .ai-robot { font-size: 4.5rem; animation: robot-float 2.5s ease-in-out infinite; display: inline-block; }
     .ai-robot-resume { font-size: 1.8rem; animation: resume-sway 3s ease-in-out infinite; display: inline-block; margin-left: -10px; }
-    @keyframes resume-sway { 0% { transform: rotate(-5deg); } 50% { transform: rotate(10deg); } 100% { transform: rotate(-5deg); } }
+    @keyframes robot-float {
+        0% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-12px) rotate(-5deg); }
+        100% { transform: translateY(0px) rotate(0deg); }
+    }
+    @keyframes resume-sway {
+        0% { transform: rotate(-5deg); }
+        50% { transform: rotate(10deg); }
+        100% { transform: rotate(-5deg); }
+    }
     .ai-robot-label { font-size: 0.75rem; font-weight: 600; color: #1F4D3E; background: #E1EDE6; padding: 4px 14px; border-radius: 30px; margin-top: 5px; }
+
+    /* ----- FIXED: ADVICE CARD WITH GLOBAL CLASSES (NO INLINE STYLES) ----- */
+    .advice-card {
+        background: #FFFFFF;
+        border-radius: 16px;
+        padding: 1.2rem 1.8rem;
+        border-left: 6px solid #2E7D5B;
+        box-shadow: 0 8px 24px rgba(31, 77, 62, 0.08);
+        height: 100%;
+        min-height: 180px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .advice-card-perfect {
+        border-left: 6px solid #4CAF50;
+    }
+    .advice-card h4 {
+        color: #1F4D3E;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    /* The clean list */
+    .priority-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .priority-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid #F0EBE0;
+    }
+    .priority-item:last-child {
+        border-bottom: none;
+    }
+    .priority-num {
+        background: #1F4D3E;
+        color: #F7F3EA;
+        font-weight: 700;
+        font-size: 0.75rem;
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+    .priority-text {
+        flex: 1;
+        color: #2C2A24;
+        font-size: 0.9rem;
+    }
+    .priority-tag {
+        background: #F3E4D8;
+        color: #8A4A2D;
+        padding: 2px 12px;
+        border-radius: 30px;
+        font-weight: 500;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+    .advice-action-pill {
+        margin-top: 12px;
+        font-size: 0.9rem;
+        color: #1F4D3E;
+        background: #E1EDE6;
+        padding: 8px 16px;
+        border-radius: 30px;
+        display: inline-block;
+        font-weight: 500;
+        align-self: flex-start;
+    }
 
     @media (max-width: 768px) {
         .hero-container { flex-direction: column; text-align: center; }
@@ -363,7 +456,7 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
 
                     st.divider()
 
-                    # ====================== ROW 2: AI ROBOT + FIXED ADVICE ======================
+                    # ====================== ROW 2: AI ROBOT + CLEAN ADVICE (FIXED) ======================
                     advice_col1, advice_col2 = st.columns([1, 3], gap="medium")
 
                     # Left: Robot
@@ -376,17 +469,17 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                         </div>
                         """, unsafe_allow_html=True)
 
-                    # Right: Eye-Catchy Advice Box (FIXED with inline styles to prevent raw HTML)
+                    # Right: Advice Card (Using global CSS classes, NO inline styles)
                     with advice_col2:
                         if missing:
-                            # Build the list items dynamically with pure inline styles (no global classes needed)
+                            # Build the list items with clean HTML (using global CSS classes)
                             list_items = ""
                             for idx, skill in enumerate(missing[:7], start=1):
                                 list_items += f"""
-                                <li style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F0EBE0; font-size: 0.95rem; color: #2C2A24; list-style: none;">
-                                    <span style="background: #1F4D3E; color: #F7F3EA; font-weight: 700; font-size: 0.75rem; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0;">{idx}</span>
-                                    <span style="flex: 1;">Gap detected in <strong>'{skill}'</strong></span>
-                                    <span style="background: #F3E4D8; color: #8A4A2D; padding: 2px 12px; border-radius: 30px; font-weight: 500; font-size: 0.75rem; white-space: nowrap;">Priority {idx}</span>
+                                <li class="priority-item">
+                                    <span class="priority-num">{idx}</span>
+                                    <span class="priority-text">Gap detected in <strong>'{skill}'</strong></span>
+                                    <span class="priority-tag">Priority {idx}</span>
                                 </li>
                                 """
 
@@ -398,12 +491,12 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                                 action_msg = "🧐 Verify if these missing skills are strictly required for the role."
 
                             advice_html = f"""
-                            <div style="background: #FFFFFF; border-radius: 16px; padding: 1.2rem 1.8rem; border-left: 6px solid #2E7D5B; box-shadow: 0 8px 24px rgba(31, 77, 62, 0.08); height: 100%; min-height: 180px; display: flex; flex-direction: column; justify-content: center;">
-                                <h4 style="color: #1F4D3E; font-weight: 700; margin-top: 0; margin-bottom: 10px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">{title}</h4>
-                                <ul style="list-style: none; padding: 0; margin: 0;">
+                            <div class="advice-card">
+                                <h4>{title}</h4>
+                                <ul class="priority-list">
                                     {list_items}
                                 </ul>
-                                <div style="margin-top: 12px; font-size: 0.9rem; color: #1F4D3E; background: #E1EDE6; padding: 8px 16px; border-radius: 30px; display: inline-block; font-weight: 500; align-self: flex-start;">💡 {action_msg}</div>
+                                <div class="advice-action-pill">💡 {action_msg}</div>
                             </div>
                             """
                         else:
@@ -412,14 +505,14 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                                 main_text = "🌟 Perfect Match! You cover all the key requirements. Proceed with confidence!"
                             else:
                                 main_text = "🌟 Perfect Match! This candidate covers all key requirements."
-                            
+
                             advice_html = f"""
-                            <div style="background: #FFFFFF; border-radius: 16px; padding: 1.2rem 1.8rem; border-left: 6px solid #4CAF50; box-shadow: 0 8px 24px rgba(31, 77, 62, 0.08); height: 100%; min-height: 180px; display: flex; flex-direction: column; justify-content: center;">
-                                <h4 style="color: #1F4D3E; font-weight: 700; margin-top: 0; font-size: 1.1rem;">🎯 Verdict</h4>
-                                <p style="font-size:1.1rem; font-weight:500; color:#1F4D3E;">{main_text}</p>
+                            <div class="advice-card advice-card-perfect">
+                                <h4>🎯 Verdict</h4>
+                                <p style="font-size:1.1rem; font-weight:500; color:#1F4D3E; margin:0;">{main_text}</p>
                             </div>
                             """
-                        
+
                         st.markdown(advice_html, unsafe_allow_html=True)
 
                     st.markdown('</div>', unsafe_allow_html=True)
