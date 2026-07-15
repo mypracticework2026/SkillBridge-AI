@@ -8,23 +8,24 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # ------------------ PAGE CONFIG ------------------
 st.set_page_config(
-    page_title="AI SkillBridge - CV Screening",
+    page_title="AI SkillBridge - Smart CV Screening",
     page_icon="🔍",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# ------------------ CUSTOM CSS (DEFINED ONCE, APPLIED GLOBALLY) ------------------
+# ------------------ GLOBAL CSS FOR LANDING PAGE ------------------
 st.markdown("""
 <style>
-    /* Hide default Streamlit elements */
+    /* Hide Streamlit elements */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display: none;}
 
+    /* Reset body */
     .stApp {
-        background: linear-gradient(135deg, #F7F3EA 0%, #EFE7D6 100%);
-        font-family: 'Inter', sans-serif;
+        background: #F9F7F2;
+        font-family: 'Inter', 'Helvetica Neue', sans-serif;
     }
     .main .block-container {
         padding-top: 0rem;
@@ -32,286 +33,188 @@ st.markdown("""
         max-width: 1200px;
     }
 
-    /* ----- HERO SECTION (Green box) ----- */
-    .hero-container {
-        background: linear-gradient(135deg, #1F4D3E 0%, #2E7D5B 100%);
-        border-radius: 20px;
-        padding: 2rem 3rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 10px 40px rgba(31, 77, 62, 0.35);
+    /* ----- NAVBAR (Sticky) ----- */
+    .navbar {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        padding: 0.8rem 2rem;
+        border-bottom: 1px solid #E5DCC5;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: #F7F3EA;
-        position: relative;
-        overflow: hidden;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        margin-bottom: 2rem;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 4px 20px rgba(44,42,36,0.04);
     }
-    .hero-text h1 {
-        font-size: 3.2rem;
+    .navbar-brand {
+        font-size: 1.6rem;
         font-weight: 800;
-        margin: 0;
-        color: #F7F3EA;
-        text-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    .hero-illustration {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 14px;
-        padding: 0 10px;
-    }
-    .doc-item {
-        font-size: 2.1rem;
-        opacity: 0.45;
-        filter: grayscale(60%);
-        transition: all 0.2s ease;
-    }
-    .doc-item.highlighted {
-        position: relative;
-        opacity: 1;
-        filter: none;
-        transform: scale(1.35) translateY(-6px);
-        background: rgba(255,255,255,0.15);
-        border-radius: 16px;
-        padding: 10px 16px;
-        backdrop-filter: blur(4px);
-        border: 2px solid rgba(255,255,255,0.5);
-        box-shadow: 0 0 30px rgba(255,255,255,0.3);
-    }
-    .doc-item.highlighted .glass-icon {
-        position: absolute;
-        top: -16px;
-        right: -16px;
-        font-size: 1.5rem;
-        transform: rotate(15deg);
-        filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
-        animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-        0% { transform: rotate(10deg) translateY(0px); }
-        50% { transform: rotate(20deg) translateY(-8px); }
-        100% { transform: rotate(10deg) translateY(0px); }
-    }
-
-    /* ----- UPLOAD CARDS ----- */
-    .upload-card {
-        background: #FFFFFF;
-        padding: 2rem 1.5rem;
-        border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(44,42,36,0.05);
-        border: 1px solid #E5DCC5;
-        transition: transform 0.2s ease;
-        height: 100%;
-    }
-    .upload-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 28px rgba(31, 77, 62, 0.12);
-    }
-    .stButton button {
-        background: linear-gradient(135deg, #1F4D3E 0%, #2E7D5B 100%);
-        color: #F7F3EA !important;
-        font-weight: 600 !important;
-        border: none !important;
-        border-radius: 12px !important;
-        padding: 0.6rem 2rem !important;
-        box-shadow: 0 4px 14px rgba(31, 77, 62, 0.35);
-        transition: all 0.2s ease;
-        width: 100%;
-    }
-    .stButton button:hover {
-        transform: scale(1.02);
-        box-shadow: 0 8px 25px rgba(31, 77, 62, 0.5);
-    }
-    .stRadio > div {
-        display: flex;
-        gap: 20px;
-        background: #FFFFFF;
-        padding: 10px 20px;
-        border-radius: 40px;
-        box-shadow: 0 2px 8px rgba(44,42,36,0.04);
-        border: 1px solid #E5DCC5;
-    }
-    .stRadio label {
-        background: transparent;
-        padding: 8px 20px;
-        border-radius: 30px;
-        font-weight: 500;
-        transition: all 0.2s;
-    }
-    .stRadio label[data-baseweb="radio"]:has(input:checked) {
-        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
-        color: #F7F3EA !important;
-        box-shadow: 0 4px 10px rgba(31, 77, 62, 0.3);
-    }
-
-    /* ----- RESULTS CARD ----- */
-    .result-card {
-        background: #FFFFFF;
-        padding: 1.5rem 2rem;
-        border-radius: 20px;
-        box-shadow: 0 8px 30px rgba(44,42,36,0.06);
-        border: 1px solid #E5DCC5;
-        margin-top: 1.5rem;
-    }
-    .skill-chip-green {
-        background: #E1EDE6;
         color: #1F4D3E;
-        padding: 6px 14px;
-        border-radius: 30px;
-        display: inline-block;
-        margin: 4px 6px 4px 0;
-        font-size: 0.85rem;
-        font-weight: 500;
-        border: 1px solid #B9D9C7;
-    }
-    .skill-chip-red {
-        background: #F3E4D8;
-        color: #8A4A2D;
-        padding: 6px 14px;
-        border-radius: 30px;
-        display: inline-block;
-        margin: 4px 6px 4px 0;
-        font-size: 0.85rem;
-        font-weight: 500;
-        border: 1px solid #E3C2A8;
-    }
-    .custom-progress {
-        height: 12px;
-        border-radius: 10px;
-        background: #EFE7D6;
-        overflow: hidden;
-        margin: 0.5rem 0 1rem 0;
-    }
-    .custom-progress-fill {
-        height: 100%;
-        border-radius: 10px;
-        background: linear-gradient(90deg, #1F4D3E, #2E7D5B);
-        width: 0%;
-        transition: width 0.8s ease;
-    }
-    .match-score-number {
-        font-size: 3.5rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        line-height: 1;
-    }
-
-    /* ----- AI ROBOT (Left Column) ----- */
-    .ai-robot-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: rgba(31, 77, 62, 0.03);
-        border-radius: 20px;
-        padding: 15px 10px;
-        border: 1px dashed #2E7D5B;
-        height: 100%;
-        min-height: 180px;
-    }
-    .ai-robot { font-size: 4.5rem; animation: robot-float 2.5s ease-in-out infinite; display: inline-block; }
-    .ai-robot-resume { font-size: 1.8rem; animation: resume-sway 3s ease-in-out infinite; display: inline-block; margin-left: -10px; }
-    @keyframes robot-float {
-        0% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-12px) rotate(-5deg); }
-        100% { transform: translateY(0px) rotate(0deg); }
-    }
-    @keyframes resume-sway {
-        0% { transform: rotate(-5deg); }
-        50% { transform: rotate(10deg); }
-        100% { transform: rotate(-5deg); }
-    }
-    .ai-robot-label { font-size: 0.75rem; font-weight: 600; color: #1F4D3E; background: #E1EDE6; padding: 4px 14px; border-radius: 30px; margin-top: 5px; }
-
-    /* ----- FIXED: ADVICE CARD WITH GLOBAL CLASSES (NO INLINE STYLES) ----- */
-    .advice-card {
-        background: #FFFFFF;
-        border-radius: 16px;
-        padding: 1.2rem 1.8rem;
-        border-left: 6px solid #2E7D5B;
-        box-shadow: 0 8px 24px rgba(31, 77, 62, 0.08);
-        height: 100%;
-        min-height: 180px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    .advice-card-perfect {
-        border-left: 6px solid #4CAF50;
-    }
-    .advice-card h4 {
-        color: #1F4D3E;
-        font-weight: 700;
-        margin-top: 0;
-        margin-bottom: 10px;
-        font-size: 1.1rem;
+        text-decoration: none;
         display: flex;
         align-items: center;
         gap: 8px;
     }
-    /* The clean list */
-    .priority-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+    .navbar-brand span {
+        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
-    .priority-item {
+    .nav-links {
         display: flex;
+        gap: 2rem;
         align-items: center;
-        gap: 10px;
-        padding: 8px 0;
-        border-bottom: 1px solid #F0EBE0;
     }
-    .priority-item:last-child {
-        border-bottom: none;
-    }
-    .priority-num {
-        background: #1F4D3E;
-        color: #F7F3EA;
-        font-weight: 700;
-        font-size: 0.75rem;
-        width: 24px;
-        height: 24px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        flex-shrink: 0;
-    }
-    .priority-text {
-        flex: 1;
+    .nav-links a {
+        text-decoration: none;
         color: #2C2A24;
-        font-size: 0.9rem;
-    }
-    .priority-tag {
-        background: #F3E4D8;
-        color: #8A4A2D;
-        padding: 2px 12px;
-        border-radius: 30px;
         font-weight: 500;
-        font-size: 0.75rem;
-        white-space: nowrap;
+        transition: color 0.2s;
     }
-    .advice-action-pill {
-        margin-top: 12px;
-        font-size: 0.9rem;
+    .nav-links a:hover {
         color: #1F4D3E;
-        background: #E1EDE6;
-        padding: 8px 16px;
-        border-radius: 30px;
-        display: inline-block;
-        font-weight: 500;
-        align-self: flex-start;
+    }
+    .nav-cta {
+        background: #1F4D3E;
+        color: #F7F3EA !important;
+        padding: 8px 20px;
+        border-radius: 40px;
+        font-weight: 600 !important;
+    }
+    .nav-cta:hover {
+        background: #2E7D5B !important;
+        color: white !important;
     }
 
-    @media (max-width: 768px) {
-        .hero-container { flex-direction: column; text-align: center; }
-        .hero-text h1 { font-size: 2.2rem; }
-        .hero-illustration { margin-top: 1rem; gap: 8px; }
-        .doc-item { font-size: 1.6rem; }
-        .doc-item.highlighted { transform: scale(1.2) translateY(-4px); }
+    /* ----- HERO SECTION ----- */
+    .hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2rem 1rem 3rem 1rem;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+    .hero-left {
+        flex: 1;
+        min-width: 280px;
+    }
+    .hero-left h1 {
+        font-size: 3.2rem;
+        font-weight: 800;
+        color: #1F4D3E;
+        line-height: 1.1;
+        margin-bottom: 0.5rem;
+    }
+    .hero-left h1 .highlight {
+        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .hero-left p {
+        font-size: 1.2rem;
+        color: #5A5448;
+        max-width: 500px;
+        margin-bottom: 2rem;
+    }
+    .hero-right {
+        flex: 0 0 200px;
+        text-align: center;
+        background: #E1EDE6;
+        padding: 2rem;
+        border-radius: 30px;
+        border: 2px dashed #2E7D5B;
+        animation: float 4s ease-in-out infinite;
+    }
+    .hero-right .big-robot {
+        font-size: 6rem;
+        display: block;
+        line-height: 1;
+    }
+    .hero-right .sub {
+        color: #1F4D3E;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+        100% { transform: translateY(0px); }
+    }
+
+    /* ----- FEATURES SECTION ----- */
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+        padding: 1rem 0;
+    }
+    .feature-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(44,42,36,0.04);
+        border: 1px solid #E5DCC5;
+        text-align: center;
+        transition: transform 0.2s ease;
+    }
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(31, 77, 62, 0.08);
+    }
+    .feature-card .icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .feature-card h3 {
+        color: #1F4D3E;
+        margin: 0.5rem 0;
+    }
+    .feature-card p {
+        color: #6B6656;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    /* ----- TOOL SECTION (The actual app) ----- */
+    .tool-container {
+        background: white;
+        border-radius: 30px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 20px 60px rgba(31, 77, 62, 0.08);
+        border: 1px solid #E5DCC5;
+        margin: 2rem 0 3rem 0;
+    }
+    .tool-container h2 {
+        color: #1F4D3E;
+        text-align: center;
+        margin-top: 0;
+    }
+
+    /* Progress bars & chips (already defined in previous versions) */
+    .custom-progress { height: 12px; border-radius: 10px; background: #EFE7D6; overflow: hidden; margin: 0.5rem 0 1rem 0; }
+    .custom-progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #1F4D3E, #2E7D5B); width: 0%; transition: width 0.8s ease; }
+    .match-score-number { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #1F4D3E, #2E7D5B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+    .skill-chip-green { background: #E1EDE6; color: #1F4D3E; padding: 6px 14px; border-radius: 30px; display: inline-block; margin: 4px 6px 4px 0; font-size: 0.85rem; font-weight: 500; border: 1px solid #B9D9C7; }
+    .skill-chip-red { background: #F3E4D8; color: #8A4A2D; padding: 6px 14px; border-radius: 30px; display: inline-block; margin: 4px 6px 4px 0; font-size: 0.85rem; font-weight: 500; border: 1px solid #E3C2A8; }
+    .upload-card { background: #F9F7F2; padding: 1.5rem; border-radius: 16px; border: 1px solid #E5DCC5; height: 100%; }
+    .stButton button { background: linear-gradient(135deg, #1F4D3E 0%, #2E7D5B 100%); color: #F7F3EA !important; font-weight: 600 !important; border: none !important; border-radius: 12px !important; padding: 0.6rem 2rem !important; box-shadow: 0 4px 14px rgba(31, 77, 62, 0.35); width: 100%; }
+    .stButton button:hover { transform: scale(1.02); box-shadow: 0 8px 25px rgba(31, 77, 62, 0.5); }
+    .stRadio > div { display: flex; gap: 20px; background: #F9F7F2; padding: 10px 20px; border-radius: 40px; border: 1px solid #E5DCC5; }
+    .stRadio label[data-baseweb="radio"]:has(input:checked) { background: linear-gradient(135deg, #1F4D3E, #2E7D5B); color: #F7F3EA !important; border-radius: 30px; padding: 8px 20px; }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        color: #6B6656;
+        padding: 2rem 0 1rem 0;
+        border-top: 1px solid #E5DCC5;
+        margin-top: 2rem;
+        font-size: 0.8rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -358,50 +261,80 @@ def extract_text_from_pdf(uploaded_file):
     except:
         return ""
 
-# ------------------ HERO ------------------
+# ------------------ LANDING PAGE HTML (Navbar, Hero, Features) ------------------
 st.markdown("""
-<div class="hero-container">
-    <div class="hero-text"><h1>AI SkillBridge</h1></div>
-    <div class="hero-illustration">
-        <div class="doc-item">📄</div>
-        <div class="doc-item">📄</div>
-        <div class="doc-item highlighted">
-            📄
-            <div class="glass-icon">🔍</div>
-        </div>
-        <div class="doc-item">📄</div>
-        <div class="doc-item">📄</div>
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="navbar-brand">🔍 <span>AI SkillBridge</span></div>
+    <div class="nav-links">
+        <a href="#">Features</a>
+        <a href="#">Pricing</a>
+        <a href="#" class="nav-cta">Get Started</a>
+    </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-left">
+        <h1>Find Your <span class="highlight">Perfect Match</span> with AI.</h1>
+        <p>Upload your CV and Job Description. Get a detailed skill gap analysis and personalized advice — whether you're hiring or applying.</p>
+    </div>
+    <div class="hero-right">
+        <div class="big-robot">🤖</div>
+        <div class="sub">🔍 AI Scanning</div>
+        <div style="font-size:0.8rem; color:#5A5448;">Real-time analysis</div>
+    </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+    <div class="feature-card">
+        <div class="icon">📄</div>
+        <h3>Instant Parsing</h3>
+        <p>Reads your PDFs and extracts key skills in seconds.</p>
+    </div>
+    <div class="feature-card">
+        <div class="icon">🎯</div>
+        <h3>Skill Gap Analysis</h3>
+        <p>Matches your CV against the JD and highlights exactly what's missing.</p>
+    </div>
+    <div class="feature-card">
+        <div class="icon">👤</div>
+        <h3>Dual Perspectives</h3>
+        <p>Switch between Candidate (upskill) and Recruiter (hire) views.</p>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# ------------------ UPLOAD ------------------
+# ------------------ TOOL SECTION (The actual app) ------------------
+st.markdown('<div class="tool-container">', unsafe_allow_html=True)
+st.markdown('<h2>🚀 Live Demo: Try It Now</h2>', unsafe_allow_html=True)
+
 col1, col2 = st.columns(2, gap="large")
 with col1:
     st.markdown('<div class="upload-card">', unsafe_allow_html=True)
-    st.subheader("📄 Upload Candidate CV")
-    cv_file = st.file_uploader("Choose a PDF", type=['pdf'], key="cv_upload", label_visibility="collapsed")
-    if cv_file: st.success(f"✅ {cv_file.name} uploaded")
+    st.subheader("📄 Upload CV")
+    cv_file = st.file_uploader("Choose PDF", type=['pdf'], key="cv_upload", label_visibility="collapsed")
+    if cv_file: st.success(f"✅ {cv_file.name}")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col2:
     st.markdown('<div class="upload-card">', unsafe_allow_html=True)
-    st.subheader("📌 Upload Job Description")
-    jd_file = st.file_uploader("Choose a PDF", type=['pdf'], key="jd_upload", label_visibility="collapsed")
-    if jd_file: st.success(f"✅ {jd_file.name} uploaded")
+    st.subheader("📌 Upload JD")
+    jd_file = st.file_uploader("Choose PDF", type=['pdf'], key="jd_upload", label_visibility="collapsed")
+    if jd_file: st.success(f"✅ {jd_file.name}")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ------------------ MODE & ANALYZE ------------------
 mode = st.radio(
     "👤 Select View",
-    ["🎓 Candidate Mode (Upskilling Advice)", "💼 Recruiter Mode (Hiring Decision)"],
+    ["🎓 Candidate Mode (Upskilling)", "💼 Recruiter Mode (Hiring)"],
     horizontal=True,
     index=0
 )
 
 if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
     if cv_file and jd_file:
-        with st.spinner("🔍 Analyzing..."):
+        with st.spinner("🔍 AI is scanning the documents..."):
             cv_text = extract_text_from_pdf(cv_file)
             jd_text = extract_text_from_pdf(jd_file)
 
@@ -424,10 +357,8 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                     matched = [skill for skill in required_skills if skill in cv_words]
                     missing = [skill for skill in required_skills if skill not in cv_words]
 
-                    # ====================== RESULTS DISPLAY ======================
-                    st.markdown('<div class="result-card">', unsafe_allow_html=True)
-
-                    # Row 1: Score + Skills
+                    # --- RESULTS (First Row: Score + Skills) ---
+                    st.markdown("---")
                     res_col1, res_col2 = st.columns([1, 2])
                     with res_col1:
                         st.markdown(f"<div class='match-score-number'>{match_percentage}%</div>", unsafe_allow_html=True)
@@ -454,32 +385,30 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                         miss_html = "".join([f"<span class='skill-chip-red'>{s}</span>" for s in missing]) if missing else "None"
                         st.markdown(miss_html, unsafe_allow_html=True)
 
-                    st.divider()
+                    st.markdown("---")
 
-                    # ====================== ROW 2: AI ROBOT + CLEAN ADVICE (FIXED) ======================
+                    # --- RESULTS (Second Row: AI Robot + BULLETPROOF HTML ADVICE) ---
                     advice_col1, advice_col2 = st.columns([1, 3], gap="medium")
 
-                    # Left: Robot
                     with advice_col1:
                         st.markdown("""
-                        <div class="ai-robot-container">
-                            <div><span class="ai-robot">🤖</span><span class="ai-robot-resume">📄</span></div>
-                            <div class="ai-robot-label">🔍 AI Scanning</div>
-                            <div style="font-size:0.7rem; color:#6B6656; margin-top:5px;">Analyzing your resume...</div>
+                        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(31,77,62,0.03); border-radius:20px; padding:15px; border:1px dashed #2E7D5B; height:100%; min-height:180px;">
+                            <div style="font-size:4rem; animation:float 3s ease-in-out infinite;">🤖</div>
+                            <div style="font-size:1.5rem; animation:resume-sway 3s ease-in-out infinite; margin-top:-10px;">📄</div>
+                            <div style="background:#E1EDE6; padding:4px 14px; border-radius:30px; font-weight:600; color:#1F4D3E; font-size:0.75rem; margin-top:5px;">🔍 AI Scanning</div>
                         </div>
                         """, unsafe_allow_html=True)
 
-                    # Right: Advice Card (Using global CSS classes, NO inline styles)
                     with advice_col2:
                         if missing:
-                            # Build the list items with clean HTML (using global CSS classes)
+                            # Build the list items as pure HTML string
                             list_items = ""
                             for idx, skill in enumerate(missing[:7], start=1):
                                 list_items += f"""
-                                <li class="priority-item">
-                                    <span class="priority-num">{idx}</span>
-                                    <span class="priority-text">Gap detected in <strong>'{skill}'</strong></span>
-                                    <span class="priority-tag">Priority {idx}</span>
+                                <li style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F0EBE0;">
+                                    <span style="background: #1F4D3E; color: #F7F3EA; font-weight: 700; font-size: 0.75rem; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0;">{idx}</span>
+                                    <span style="flex: 1; color: #2C2A24; font-size: 0.9rem;">Gap detected in <strong>'{skill}'</strong></span>
+                                    <span style="background: #F3E4D8; color: #8A4A2D; padding: 2px 12px; border-radius: 30px; font-weight: 500; font-size: 0.75rem; white-space: nowrap;">Priority {idx}</span>
                                 </li>
                                 """
 
@@ -490,32 +419,26 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                                 title = "📌 Hiring Recommendation (Skill Gaps)"
                                 action_msg = "🧐 Verify if these missing skills are strictly required for the role."
 
+                            # Build the FULL HTML document for the iframe
                             advice_html = f"""
-                            <div class="advice-card">
-                                <h4>{title}</h4>
-                                <ul class="priority-list">
+                            <div style="background: #FFFFFF; border-radius: 16px; padding: 1.2rem 1.8rem; border-left: 6px solid #2E7D5B; box-shadow: 0 8px 24px rgba(31, 77, 62, 0.08); height: 100%; min-height: 180px; display: flex; flex-direction: column; justify-content: center;">
+                                <h4 style="color: #1F4D3E; font-weight: 700; margin-top: 0; margin-bottom: 10px; font-size: 1.1rem;">{title}</h4>
+                                <ul style="list-style: none; padding: 0; margin: 0;">
                                     {list_items}
                                 </ul>
-                                <div class="advice-action-pill">💡 {action_msg}</div>
+                                <div style="margin-top: 12px; font-size: 0.9rem; color: #1F4D3E; background: #E1EDE6; padding: 8px 16px; border-radius: 30px; display: inline-block; font-weight: 500; align-self: flex-start;">💡 {action_msg}</div>
                             </div>
                             """
+                            # RENDER USING st.components.v1.html (100% bulletproof, no Markdown interference!)
+                            st.components.v1.html(advice_html, height=280)
                         else:
-                            # Perfect match
-                            if mode_str == "Candidate":
-                                main_text = "🌟 Perfect Match! You cover all the key requirements. Proceed with confidence!"
-                            else:
-                                main_text = "🌟 Perfect Match! This candidate covers all key requirements."
-
-                            advice_html = f"""
-                            <div class="advice-card advice-card-perfect">
-                                <h4>🎯 Verdict</h4>
-                                <p style="font-size:1.1rem; font-weight:500; color:#1F4D3E; margin:0;">{main_text}</p>
+                            perfect_html = """
+                            <div style="background: #FFFFFF; border-radius: 16px; padding: 1.2rem 1.8rem; border-left: 6px solid #4CAF50; box-shadow: 0 8px 24px rgba(31, 77, 62, 0.08); height: 100%; min-height: 180px; display: flex; flex-direction: column; justify-content: center;">
+                                <h4 style="color: #1F4D3E; font-weight: 700; margin-top: 0; font-size: 1.1rem;">🎯 Verdict</h4>
+                                <p style="font-size:1.1rem; font-weight:500; color:#1F4D3E; margin:0;">🌟 Perfect Match! You cover all the key requirements. Proceed with confidence!</p>
                             </div>
                             """
-
-                        st.markdown(advice_html, unsafe_allow_html=True)
-
-                    st.markdown('</div>', unsafe_allow_html=True)
+                            st.components.v1.html(perfect_html, height=180)
                 else:
                     st.warning("Could not extract meaningful text.")
             else:
@@ -523,9 +446,12 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
     else:
         st.warning("⚠️ Please upload both a CV and a Job Description.")
 
+st.markdown('</div>', unsafe_allow_html=True)
+
 # ------------------ FOOTER ------------------
-st.divider()
-st.markdown(
-    "<p style='text-align: center; color: #6B6656; font-size: 0.8rem;'>Built with ❤️ using Streamlit, Scikit-Learn, and PDFPlumber</p>",
-    unsafe_allow_html=True
-)
+st.markdown("""
+<div class="footer">
+    Built with ❤️ using Streamlit, Scikit-Learn, and PDFPlumber<br>
+    &copy; 2026 AI SkillBridge
+</div>
+""", unsafe_allow_html=True)
