@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ------------------ GLOBAL CSS (Only for Navbar, Hero, Uploads) ------------------
+# ------------------ GLOBAL CSS ------------------
 st.markdown("""
 <style>
     #MainMenu {visibility: hidden;}
@@ -191,95 +191,91 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                     st.markdown("---")
                     st.markdown("### 📊 Analysis Dashboard")
 
-                    # ======================== 3-COLUMN CARDS (FIXED: INLINE STYLES) ========================
-                    col_jd, col_cv, col_results = st.columns([1, 1, 1.2], gap="medium")
+                    # ======================== 3-COLUMN CARDS (FIXED - NO RAW HTML LEAK) ========================
+                    
+                    # Build the card contents
+                    # Card 1: JD
+                    chips_jd = "".join([f'<span style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:30px;display:inline-block;margin:3px 4px 3px 0;font-size:0.8rem;font-weight:500;border:1px solid #e2e8f0;">{skill}</span>' for skill in required_skills[:10]]) if required_skills else '<span style="color:#94a3b8;">No requirements extracted.</span>'
+                    
+                    # Card 2: CV
+                    chips_cv = "".join([f'<span style="background:#dcfce7;color:#166534;padding:4px 12px;border-radius:30px;display:inline-block;margin:3px 4px 3px 0;font-size:0.8rem;font-weight:600;border:1px solid #bbf7d0;">{skill}</span>' for skill in matched[:12]]) if matched else '<span style="color:#94a3b8;">No skills matched.</span>'
+                    
+                    # Card 3: Similarities
+                    chips_match = "".join([f'<span style="background:#dcfce7;color:#166534;padding:4px 12px;border-radius:30px;display:inline-block;margin:3px 4px 3px 0;font-size:0.8rem;font-weight:600;border:1px solid #bbf7d0;">{skill}</span>' for skill in matched[:5]]) if matched else '<span style="color:#94a3b8;">None</span>'
+                    
+                    if missing:
+                        chips_gap = "".join([f'<span style="background:#fee2e2;color:#991b1b;padding:4px 12px;border-radius:30px;display:inline-block;margin:3px 4px 3px 0;font-size:0.8rem;font-weight:600;border:1px solid #fecaca;">{skill}</span>' for skill in missing[:5]])
+                        if len(missing) > 5:
+                            chips_gap += f'<br><span style="color:#94a3b8;font-size:0.8rem;">+ {len(missing) - 5} more gaps...</span>'
+                    else:
+                        chips_gap = '<span style="color:#22c55e;font-weight:600;">No gaps! Perfect match.</span>'
+                    
+                    if mode_str == "Candidate":
+                        if match_percentage >= 80: verdict = "🌟 Excellent Fit!"
+                        elif match_percentage >= 50: verdict = "📈 Good Foundation"
+                        else: verdict = "🔄 Gaps Detected"
+                    else:
+                        if match_percentage >= 70: verdict = "📞 Shortlist"
+                        elif match_percentage >= 40: verdict = "🧐 Review"
+                        else: verdict = "❌ Reject"
 
-                    # 1) JOB DESCRIPTION CARD
-                    with col_jd:
-                        chips_jd = "".join([f'<span style="background:#f1f5f9; color:#475569; padding:4px 12px; border-radius:30px; display:inline-block; margin:3px 4px 3px 0; font-size:0.8rem; font-weight:500; border:1px solid #e2e8f0;">{skill}</span>' for skill in required_skills[:10]]) if required_skills else '<span style="color:#94a3b8;">No requirements extracted.</span>'
-                        
-                        st.markdown(f"""
-                        <div style="background: white; border: 3px dotted #0d9488; border-radius: 20px; padding: 1.5rem; min-height: 250px; height: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
-                            <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                                📌 Job Description <span style="background: #0d9488; color: white; font-size: 0.6rem; padding: 2px 10px; border-radius: 30px;">Requirements</span>
+                    # Use a single HTML container with display:flex to force equal heights
+                    st.markdown(f"""
+                    <div style="display:flex; gap:20px; margin-top:15px; align-items:stretch;">
+
+                        <!-- CARD 1: JOB DESCRIPTION -->
+                        <div style="flex:1; background:white; border:3px dotted #0d9488; border-radius:20px; padding:1.5rem; min-height:280px; box-shadow:0 4px 12px rgba(0,0,0,0.03); display:flex; flex-direction:column;">
+                            <div style="font-weight:700; font-size:1.05rem; color:#0f172a; border-bottom:2px solid #f1f5f9; padding-bottom:10px; margin-bottom:12px;">
+                                📌 Job Description <span style="background:#0d9488; color:white; font-size:0.6rem; padding:2px 10px; border-radius:30px;">Requirements</span>
                             </div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                            <div style="display:flex; flex-wrap:wrap; gap:4px;">
                                 {chips_jd}
                             </div>
-                            <div style="flex: 1;"></div>
+                            <div style="flex:1;"></div>
                         </div>
-                        """, unsafe_allow_html=True)
 
-                    # 2) CANDIDATE CV CARD
-                    with col_cv:
-                        chips_cv = "".join([f'<span style="background:#dcfce7; color:#166534; padding:4px 12px; border-radius:30px; display:inline-block; margin:3px 4px 3px 0; font-size:0.8rem; font-weight:600; border:1px solid #bbf7d0;">{skill}</span>' for skill in matched[:12]]) if matched else '<span style="color:#94a3b8;">No skills matched.</span>'
-                        
-                        st.markdown(f"""
-                        <div style="background: white; border: 3px dotted #0d9488; border-radius: 20px; padding: 1.5rem; min-height: 250px; height: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
-                            <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                                📄 Candidate CV <span style="background: #0d9488; color: white; font-size: 0.6rem; padding: 2px 10px; border-radius: 30px;">Your Profile</span>
+                        <!-- CARD 2: CANDIDATE CV -->
+                        <div style="flex:1; background:white; border:3px dotted #0d9488; border-radius:20px; padding:1.5rem; min-height:280px; box-shadow:0 4px 12px rgba(0,0,0,0.03); display:flex; flex-direction:column;">
+                            <div style="font-weight:700; font-size:1.05rem; color:#0f172a; border-bottom:2px solid #f1f5f9; padding-bottom:10px; margin-bottom:12px;">
+                                📄 Candidate CV <span style="background:#0d9488; color:white; font-size:0.6rem; padding:2px 10px; border-radius:30px;">Your Profile</span>
                             </div>
-                            <p style="margin: 0 0 6px 0; font-weight: 600; color: #0f172a; font-size: 0.85rem;">✅ Skills Detected</p>
-                            <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;">
+                            <div style="font-weight:600; color:#0f172a; font-size:0.85rem; margin-bottom:6px;">✅ Skills Detected</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
                                 {chips_cv}
                             </div>
-                            <div style="margin-top: auto; border-top: 1px solid #f1f5f9; padding-top: 10px; font-size: 0.85rem; color: #475569;">
+                            <div style="margin-top:auto; border-top:1px solid #f1f5f9; padding-top:10px; font-size:0.85rem; color:#475569;">
                                 📊 <strong>Profile Stats</strong><br>
                                 Total skills analyzed: <strong>{len(cv_words)}</strong>
                             </div>
                         </div>
-                        """, unsafe_allow_html=True)
 
-                    # 3) SIMILARITIES & GAPS CARD
-                    with col_results:
-                        chips_match = "".join([f'<span style="background:#dcfce7; color:#166534; padding:4px 12px; border-radius:30px; display:inline-block; margin:3px 4px 3px 0; font-size:0.8rem; font-weight:600; border:1px solid #bbf7d0;">{skill}</span>' for skill in matched[:5]]) if matched else '<span style="color:#94a3b8;">None</span>'
-                        
-                        if missing:
-                            chips_gap = "".join([f'<span style="background:#fee2e2; color:#991b1b; padding:4px 12px; border-radius:30px; display:inline-block; margin:3px 4px 3px 0; font-size:0.8rem; font-weight:600; border:1px solid #fecaca;">{skill}</span>' for skill in missing[:5]])
-                            if len(missing) > 5:
-                                chips_gap += f'<br><span style="color:#94a3b8; font-size:0.8rem;">+ {len(missing) - 5} more gaps...</span>'
-                        else:
-                            chips_gap = '<span style="color:#22c55e; font-weight:600;">No gaps! Perfect match.</span>'
-                        
-                        verdict = ""
-                        if mode_str == "Candidate":
-                            if match_percentage >= 80: verdict = "🌟 Excellent Fit!"
-                            elif match_percentage >= 50: verdict = "📈 Good Foundation"
-                            else: verdict = "🔄 Gaps Detected"
-                        else:
-                            if match_percentage >= 70: verdict = "📞 Shortlist"
-                            elif match_percentage >= 40: verdict = "🧐 Review"
-                            else: verdict = "❌ Reject"
-
-                        st.markdown(f"""
-                        <div style="background: white; border: 3px dotted #0d9488; border-radius: 20px; padding: 1.5rem; min-height: 250px; height: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
-                            <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px;">
+                        <!-- CARD 3: SIMILARITIES & GAPS -->
+                        <div style="flex:1.2; background:white; border:3px dotted #0d9488; border-radius:20px; padding:1.5rem; min-height:280px; box-shadow:0 4px 12px rgba(0,0,0,0.03); display:flex; flex-direction:column;">
+                            <div style="font-weight:700; font-size:1.05rem; color:#0f172a; border-bottom:2px solid #f1f5f9; padding-bottom:10px; margin-bottom:12px;">
                                 ⚡ Similarities & Gaps
                             </div>
-                            
-                            <p style="margin: 0 0 2px 0; font-weight: 600; color: #0f172a; font-size: 0.85rem;">✅ Matched Skills</p>
-                            <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;">
+                            <div style="font-weight:600; color:#0f172a; font-size:0.85rem; margin-bottom:2px;">✅ Matched Skills</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;">
                                 {chips_match}
                             </div>
-                            
-                            <div style="margin: 4px 0;">
-                                <div style="font-size: 3.5rem; font-weight: 800; color: #0d9488; line-height: 1; text-align: center; margin: 0.2rem 0;">{match_percentage}%</div>
-                                <div style="text-align: center; font-weight: 600; color: #475569; font-size: 0.8rem;">Match Score</div>
-                                <div style="height: 8px; border-radius: 10px; background: #f1f5f9; overflow: hidden; margin: 0.3rem 0 0.5rem 0;">
-                                    <div style="height: 100%; border-radius: 10px; background: linear-gradient(90deg, #0d9488, #14b8a6); width: {min(match_percentage, 100)}%;"></div>
+                            <div style="margin:4px 0;">
+                                <div style="font-size:3.5rem; font-weight:800; color:#0d9488; line-height:1; text-align:center; margin:0.2rem 0;">{match_percentage}%</div>
+                                <div style="text-align:center; font-weight:600; color:#475569; font-size:0.8rem;">Match Score</div>
+                                <div style="height:8px; border-radius:10px; background:#f1f5f9; overflow:hidden; margin:0.3rem 0 0.5rem 0;">
+                                    <div style="height:100%; border-radius:10px; background:linear-gradient(90deg, #0d9488, #14b8a6); width:{min(match_percentage, 100)}%;"></div>
                                 </div>
                             </div>
-                            
-                            <div style="font-weight:600; margin: 2px 0 4px 0;">{verdict}</div>
-                            
-                            <div style="border-top: 1px solid #f1f5f9; padding-top: 8px; margin-top: 4px;">
-                                <p style="margin: 0 0 2px 0; font-weight: 600; color: #0f172a; font-size: 0.85rem;">❌ Skill Gaps</p>
-                                <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                            <div style="font-weight:600; margin:2px 0 4px 0;">{verdict}</div>
+                            <div style="border-top:1px solid #f1f5f9; padding-top:8px; margin-top:4px;">
+                                <div style="font-weight:600; color:#0f172a; font-size:0.85rem; margin-bottom:2px;">❌ Skill Gaps</div>
+                                <div style="display:flex; flex-wrap:wrap; gap:4px;">
                                     {chips_gap}
                                 </div>
                             </div>
                         </div>
-                        """, unsafe_allow_html=True)
+
+                    </div>
+                    """, unsafe_allow_html=True)
 
                     # ----- ADVICE BANNER -----
                     st.markdown("---")
