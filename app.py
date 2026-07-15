@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ------------------ CUSTOM CSS (with changes) ------------------
+# ------------------ CUSTOM CSS (Added Animated Robot & New Advice Styles) ------------------
 st.markdown("""
 <style>
     /* Hide default Streamlit elements */
@@ -56,7 +56,6 @@ st.markdown("""
         text-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
-    /* Row of resumes with one highlighted under the magnifying glass */
     .hero-illustration {
         display: flex;
         align-items: center;
@@ -97,7 +96,128 @@ st.markdown("""
         100% { transform: rotate(10deg) translateY(0px); }
     }
 
-    /* Upload Cards */
+    /* ----- NEW: Animated AI Robot ----- */
+    .ai-robot-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(31, 77, 62, 0.03);
+        border-radius: 20px;
+        padding: 15px 10px;
+        border: 1px dashed #2E7D5B;
+        height: 100%;
+        min-height: 180px;
+    }
+    .ai-robot {
+        font-size: 4.5rem;
+        line-height: 1;
+        animation: robot-float 2.5s ease-in-out infinite;
+        display: inline-block;
+    }
+    .ai-robot-resume {
+        font-size: 1.8rem;
+        margin-left: -10px;
+        animation: resume-sway 3s ease-in-out infinite;
+        display: inline-block;
+    }
+    @keyframes robot-float {
+        0% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-12px) rotate(-5deg); }
+        100% { transform: translateY(0px) rotate(0deg); }
+    }
+    @keyframes resume-sway {
+        0% { transform: rotate(-5deg); }
+        50% { transform: rotate(10deg); }
+        100% { transform: rotate(-5deg); }
+    }
+    .ai-robot-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #1F4D3E;
+        background: #E1EDE6;
+        padding: 4px 14px;
+        border-radius: 30px;
+        margin-top: 5px;
+        letter-spacing: 0.5px;
+    }
+
+    /* ----- NEW: Eye-Catchy Advice Box ----- */
+    .advice-card {
+        background: #FFFFFF;
+        border-radius: 16px;
+        padding: 1.2rem 1.8rem;
+        border-left: 6px solid #2E7D5B;
+        box-shadow: 0 8px 24px rgba(31, 77, 62, 0.08);
+        height: 100%;
+        min-height: 180px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .advice-card h4 {
+        color: #1F4D3E;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .advice-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .advice-list li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+        border-bottom: 1px solid #F0EBE0;
+        font-size: 0.9rem;
+        color: #2C2A24;
+    }
+    .advice-list li:last-child {
+        border-bottom: none;
+    }
+    .advice-list .num-badge {
+        background: #1F4D3E;
+        color: #F7F3EA;
+        font-weight: 700;
+        font-size: 0.7rem;
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+    .advice-list .skill-tag {
+        background: #F3E4D8;
+        color: #8A4A2D;
+        padding: 2px 12px;
+        border-radius: 30px;
+        font-weight: 500;
+        font-size: 0.8rem;
+        margin-left: 5px;
+        white-space: nowrap;
+    }
+    .advice-action-text {
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: #1F4D3E;
+        background: #E1EDE6;
+        padding: 8px 14px;
+        border-radius: 30px;
+        display: inline-block;
+        font-weight: 500;
+        align-self: flex-start;
+    }
+
+    /* Upload Cards, Buttons, etc. (Keep your existing styles) */
     .upload-card {
         background: #FFFFFF;
         padding: 2rem 1.5rem;
@@ -111,8 +231,6 @@ st.markdown("""
         transform: translateY(-2px);
         box-shadow: 0 12px 28px rgba(31, 77, 62, 0.12);
     }
-
-    /* Buttons */
     .stButton button {
         background: linear-gradient(135deg, #1F4D3E 0%, #2E7D5B 100%);
         color: #F7F3EA !important;
@@ -128,8 +246,6 @@ st.markdown("""
         transform: scale(1.02);
         box-shadow: 0 8px 25px rgba(31, 77, 62, 0.5);
     }
-
-    /* Radio Buttons (Mode Toggle) */
     .stRadio > div {
         display: flex;
         gap: 20px;
@@ -151,8 +267,6 @@ st.markdown("""
         color: #F7F3EA !important;
         box-shadow: 0 4px 10px rgba(31, 77, 62, 0.3);
     }
-
-    /* Results Cards */
     .result-card {
         background: #FFFFFF;
         padding: 1.5rem 2rem;
@@ -183,8 +297,6 @@ st.markdown("""
         font-weight: 500;
         border: 1px solid #E3C2A8;
     }
-
-    /* Custom Progress Bar */
     .custom-progress {
         height: 12px;
         border-radius: 10px;
@@ -199,7 +311,6 @@ st.markdown("""
         width: 0%;
         transition: width 0.8s ease;
     }
-
     .match-score-number {
         font-size: 3.5rem;
         font-weight: 800;
@@ -208,7 +319,6 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         line-height: 1;
     }
-
     @media (max-width: 768px) {
         .hero-container { flex-direction: column; text-align: center; }
         .hero-text h1 { font-size: 2.2rem; }
@@ -261,12 +371,11 @@ def extract_text_from_pdf(uploaded_file):
     except:
         return ""
 
-# ================== MODIFIED HERO (no branding bar) ==================
+# ------------------ HERO (No Branding Bar) ------------------
 st.markdown("""
 <div class="hero-container">
     <div class="hero-text">
         <h1>AI SkillBridge</h1>
-        <!-- subtitle and 'powered by' removed -->
     </div>
     <div class="hero-illustration">
         <div class="doc-item">📄</div>
@@ -281,7 +390,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ------------------ UPLOAD, MODE, ANALYZE (unchanged) ------------------
+# ------------------ UPLOAD SECTION ------------------
 col1, col2 = st.columns(2, gap="large")
 
 with col1:
@@ -300,6 +409,7 @@ with col2:
         st.success(f"✅ {jd_file.name} uploaded")
     st.markdown('</div>', unsafe_allow_html=True)
 
+# ------------------ MODE & ANALYZE ------------------
 mode = st.radio(
     "👤 Select View",
     ["🎓 Candidate Mode (Upskilling Advice)", "💼 Recruiter Mode (Hiring Decision)"],
@@ -332,9 +442,11 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                     matched = [skill for skill in required_skills if skill in cv_words]
                     missing = [skill for skill in required_skills if skill not in cv_words]
 
+                    # ====================== RESULTS DISPLAY ======================
                     st.markdown('<div class="result-card">', unsafe_allow_html=True)
-                    res_col1, res_col2 = st.columns([1, 2])
 
+                    # Row 1: Score + Skills (unchanged)
+                    res_col1, res_col2 = st.columns([1, 2])
                     with res_col1:
                         st.markdown(f"<div class='match-score-number'>{match_percentage}%</div>", unsafe_allow_html=True)
                         st.markdown(f"""
@@ -342,7 +454,6 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                             <div class="custom-progress-fill" style="width: {min(match_percentage, 100)}%;"></div>
                         </div>
                         """, unsafe_allow_html=True)
-
                         mode_str = "Candidate" if "Candidate" in mode else "Recruiter"
                         if mode_str == "Candidate":
                             if match_percentage >= 80:
@@ -363,30 +474,72 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                         st.markdown(f"**✅ Matched Skills ({len(matched)})**")
                         match_html = "".join([f"<span class='skill-chip-green'>{s}</span>" for s in matched]) if matched else "None"
                         st.markdown(match_html, unsafe_allow_html=True)
-
                         st.markdown(f"**❌ Missing Skills ({len(missing)})**")
                         miss_html = "".join([f"<span class='skill-chip-red'>{s}</span>" for s in missing]) if missing else "None"
                         st.markdown(miss_html, unsafe_allow_html=True)
 
                     st.divider()
-                    if mode_str == "Candidate":
-                        if match_percentage >= 80:
-                            advice = "🌟 EXCELLENT FIT! Highlight these matched skills in your interview."
-                        elif match_percentage >= 50:
-                            advice = f"📈 Good foundation. Focus on: {', '.join(missing[:3])}. Consider a certification."
-                        elif match_percentage >= 30:
-                            advice = f"⚠️ Significant gaps. Focus on: {', '.join(missing[:5])}. Take relevant courses."
+
+                    # ====================== ROW 2: AI ROBOT + EYE-CATCHY ADVICE BOX ======================
+                    advice_col1, advice_col2 = st.columns([1, 3], gap="medium")
+
+                    # --- Left Column: Animated AI Robot ---
+                    with advice_col1:
+                        st.markdown("""
+                        <div class="ai-robot-container">
+                            <div>
+                                <span class="ai-robot">🤖</span>
+                                <span class="ai-robot-resume">📄</span>
+                            </div>
+                            <div class="ai-robot-label">🔍 AI Scanning</div>
+                            <div style="font-size:0.7rem; color:#6B6656; margin-top:5px;">Analyzing your resume...</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    # --- Right Column: Eye-Catchy Advice Box (Styled like a real coach) ---
+                    with advice_col2:
+                        # Generate the dynamic list of missing skills with numbers
+                        if missing:
+                            list_items = ""
+                            for idx, skill in enumerate(missing[:7], start=1):  # Show top 7 gaps
+                                list_items += f"""
+                                <li>
+                                    <span class="num-badge">{idx}</span>
+                                    <span>Gap detected in <strong>'{skill}'</strong></span>
+                                    <span class="skill-tag">Priority {idx}</span>
+                                </li>
+                                """
+                            # Add a custom action message based on mode
+                            if mode_str == "Candidate":
+                                action_msg = "📚 Consider taking relevant courses or building projects to bridge these gaps."
+                                title = "📌 Personalized Upskilling Plan"
+                            else:
+                                action_msg = "🧐 Verify if these missing skills are strictly required for the role."
+                                title = "📌 Hiring Recommendation (Skill Gaps)"
+                            
+                            advice_html = f"""
+                            <div class="advice-card">
+                                <h4>{title}</h4>
+                                <ul class="advice-list">
+                                    {list_items}
+                                </ul>
+                                <div class="advice-action-text">💡 {action_msg}</div>
+                            </div>
+                            """
                         else:
-                            advice = f"🔄 Career pivot needed. Missing: {', '.join(missing[:5])}. Explore junior roles."
-                        st.info(f"💡 **Advice:** {advice}")
-                    else:
-                        if match_percentage >= 70:
-                            decision = "📞 SHORTLIST: Proceed to interview."
-                        elif match_percentage >= 40:
-                            decision = f"🧐 REVIEW: Check missing: {', '.join(missing[:3])}."
-                        else:
-                            decision = f"❌ REJECT: Not suitable. Missing: {', '.join(missing[:5])}."
-                        st.info(f"⚖️ **Decision:** {decision}")
+                            # Perfect match scenario
+                            if mode_str == "Candidate":
+                                main_text = "🌟 Perfect Match! You cover all the key requirements. Proceed with confidence!"
+                            else:
+                                main_text = "🌟 Perfect Match! This candidate covers all key requirements."
+                            advice_html = f"""
+                            <div class="advice-card" style="border-left-color: #4CAF50;">
+                                <h4>🎯 Verdict</h4>
+                                <p style="font-size:1.1rem; font-weight:500; color:#1F4D3E;">{main_text}</p>
+                            </div>
+                            """
+                        
+                        st.markdown(advice_html, unsafe_allow_html=True)
 
                     st.markdown('</div>', unsafe_allow_html=True)
                 else:
@@ -396,6 +549,7 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
     else:
         st.warning("⚠️ Please upload both a CV and a Job Description.")
 
+# ------------------ FOOTER ------------------
 st.divider()
 st.markdown(
     "<p style='text-align: center; color: #6B6656; font-size: 0.8rem;'>Built with ❤️ using Streamlit, Scikit-Learn, and PDFPlumber</p>",
