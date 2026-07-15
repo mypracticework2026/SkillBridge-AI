@@ -14,19 +14,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ------------------ CUSTOM CSS (Global Styling) ------------------
+# ------------------ CUSTOM CSS ------------------
 st.markdown("""
 <style>
-    /* Hide Streamlit default elements */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display: none;}
 
-    /* Main background */
-    .stApp {
-        background: #f0f4f8;
-        font-family: 'Inter', 'Helvetica Neue', sans-serif;
-    }
+    .stApp { background: #f0f4f8; font-family: 'Inter', sans-serif; }
     .main .block-container {
         padding-top: 0rem;
         padding-bottom: 0rem;
@@ -49,48 +44,15 @@ st.markdown("""
         z-index: 1000;
         margin-bottom: 1.5rem;
         border-radius: 0 0 20px 20px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.02);
     }
-    .navbar-left {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        font-size: 1.1rem;
-        color: #0f172a;
-    }
-    .navbar-left a {
-        text-decoration: none;
-        color: #0f172a;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-weight: 500;
-        transition: color 0.2s;
-    }
+    .navbar-left { display: flex; align-items: center; gap: 20px; font-size: 1rem; color: #0f172a; }
+    .navbar-left a { text-decoration: none; color: #0f172a; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.2s; }
     .navbar-left a:hover { color: #0d9488; }
-    .navbar-right {
-        display: flex;
-        align-items: center;
-        gap: 25px;
-        font-weight: 500;
-    }
-    .navbar-right a {
-        text-decoration: none;
-        color: #334155;
-        transition: color 0.2s;
-    }
+    .navbar-right { display: flex; align-items: center; gap: 25px; font-weight: 500; }
+    .navbar-right a { text-decoration: none; color: #334155; transition: color 0.2s; }
     .navbar-right a:hover { color: #0d9488; }
-    .btn-outline {
-        border: 2px solid #0d9488;
-        padding: 6px 18px;
-        border-radius: 40px;
-        color: #0d9488 !important;
-        font-weight: 600;
-    }
-    .btn-outline:hover {
-        background: #0d9488;
-        color: white !important;
-    }
+    .btn-outline { border: 2px solid #0d9488; padding: 6px 18px; border-radius: 40px; color: #0d9488 !important; font-weight: 600; }
+    .btn-outline:hover { background: #0d9488; color: white !important; }
 
     /* ----- HERO SECTION ----- */
     .hero {
@@ -102,45 +64,21 @@ st.markdown("""
         align-items: center;
         justify-content: space-between;
         box-shadow: 0 20px 60px rgba(13, 148, 136, 0.2);
-        min-height: 280px;
+        min-height: 260px;
         flex-wrap: wrap;
     }
-    .hero-left {
-        flex: 1 1 300px;
-        color: #0f172a;
-    }
-    .hero-left h1 {
-        font-size: 3.2rem;
-        font-weight: 800;
-        margin: 0;
-        line-height: 1.1;
-        color: #0f172a;
-    }
-    .hero-left p {
-        font-size: 1.2rem;
-        margin: 0.5rem 0 0 0;
-        opacity: 0.85;
-    }
-    .hero-right {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        padding: 10px;
-        flex-wrap: wrap;
-    }
-    .cv-icon {
-        font-size: 2.8rem;
-        opacity: 0.5;
-        transition: transform 0.3s;
-    }
+    .hero-left { flex: 1 1 300px; color: #0f172a; }
+    .hero-left h1 { font-size: 3.2rem; font-weight: 800; margin: 0; line-height: 1.1; color: #0f172a; }
+    .hero-left p { font-size: 1.2rem; margin: 0.5rem 0 0 0; opacity: 0.85; }
+    .hero-right { display: flex; align-items: center; justify-content: center; gap: 15px; padding: 10px; flex-wrap: wrap; }
+    .cv-icon { font-size: 2.8rem; opacity: 0.5; transition: transform 0.3s; }
     .cv-icon.highlighted {
         font-size: 4.2rem;
         opacity: 1;
         transform: scale(1.2) translateY(-8px);
         background: rgba(255,255,255,0.25);
         border-radius: 16px;
-        padding: 0 10px 0 10px;
+        padding: 0 10px;
         backdrop-filter: blur(4px);
         border: 2px solid rgba(255,255,255,0.6);
         box-shadow: 0 0 30px rgba(255,255,255,0.3);
@@ -168,15 +106,12 @@ st.markdown("""
         border-radius: 20px;
         border: 2px solid #e2e8f0;
         box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-        transition: border-color 0.2s, box-shadow 0.2s;
+        transition: border-color 0.2s;
         height: 100%;
     }
-    .upload-card:hover {
-        border-color: #0d9488;
-        box-shadow: 0 8px 24px rgba(13, 148, 136, 0.08);
-    }
+    .upload-card:hover { border-color: #0d9488; }
 
-    /* ----- RESULT CARDS (Dotted Border) ----- */
+    /* ----- RESULT BOXES (Dotted Border) ----- */
     .result-box {
         background: white;
         border: 3px dotted #0d9488;
@@ -187,7 +122,7 @@ st.markdown("""
         box-shadow: 0 4px 12px rgba(0,0,0,0.02);
     }
     .result-box h4 {
-        margin: 0 0 0.5rem 0;
+        margin: 0 0 0.8rem 0;
         color: #0f172a;
         font-weight: 700;
         font-size: 1.1rem;
@@ -202,21 +137,9 @@ st.markdown("""
         font-weight: 600;
         margin: 4px 6px 4px 0;
     }
-    .chip-green {
-        background: #dcfce7;
-        color: #166534;
-        border: 1px solid #bbf7d0;
-    }
-    .chip-red {
-        background: #fee2e2;
-        color: #991b1b;
-        border: 1px solid #fecaca;
-    }
-    .chip-neutral {
-        background: #f1f5f9;
-        color: #475569;
-        border: 1px solid #e2e8f0;
-    }
+    .chip-green { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .chip-red { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .chip-neutral { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
 
     /* ----- ADVICE BOX ----- */
     .advice-box {
@@ -225,39 +148,32 @@ st.markdown("""
         padding: 1.2rem 1.8rem;
         border-left: 6px solid #0d9488;
         margin: 1.2rem 0;
+        font-size: 1rem;
     }
 
-    /* ----- FOOTER ----- */
+    /* ----- FOOTER (Now with Hero Colors) ----- */
     .footer {
+        background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+        color: white !important;
+        padding: 2rem 2rem;
+        border-radius: 20px 20px 0 0;
         margin-top: 3rem;
-        padding: 2rem 0 1rem 0;
-        border-top: 1px solid #e2e8f0;
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
         gap: 1.5rem;
-        color: #475569;
-        font-size: 0.9rem;
+        align-items: center;
     }
-    .footer-left {
-        font-weight: 600;
-        color: #0f172a;
-    }
-    .footer-right {
-        display: flex;
-        gap: 2rem;
-        flex-wrap: wrap;
-    }
-    .footer-right a {
+    .footer a {
+        color: #ccfbf1;
         text-decoration: none;
-        color: #475569;
         transition: color 0.2s;
+        margin-left: 1.5rem;
     }
-    .footer-right a:hover {
-        color: #0d9488;
-    }
+    .footer a:hover { color: white; }
+    .footer-left { font-weight: 700; font-size: 1.1rem; }
 
-    /* Buttons */
+    /* Buttons & Radio */
     .stButton button {
         background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
         color: white !important;
@@ -267,12 +183,9 @@ st.markdown("""
         padding: 0.6rem 2rem !important;
         box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
         width: 100%;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition: transform 0.2s;
     }
-    .stButton button:hover {
-        transform: scale(1.02);
-        box-shadow: 0 8px 25px rgba(13, 148, 136, 0.5);
-    }
+    .stButton button:hover { transform: scale(1.02); box-shadow: 0 8px 25px rgba(13, 148, 136, 0.5); }
     .stRadio > div {
         display: flex;
         gap: 20px;
@@ -287,12 +200,12 @@ st.markdown("""
         border-radius: 30px;
         padding: 8px 20px;
     }
-
     @media (max-width: 768px) {
         .hero { flex-direction: column; text-align: center; }
         .hero-left h1 { font-size: 2.2rem; }
         .navbar-right { display: none; }
-        .footer { flex-direction: column; align-items: center; text-align: center; }
+        .footer { flex-direction: column; text-align: center; }
+        .footer a { margin: 0 0.5rem; }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -312,7 +225,7 @@ def load_model():
             model = pickle.load(f)
         return model
     except FileNotFoundError:
-        st.error("🚨 Model file 'aicvscreening_model.pkl' not found! Please ensure it's in the same directory.")
+        st.error("🚨 Model file 'aicvscreening_model.pkl' not found!")
         st.stop()
 
 model = load_model()
@@ -438,33 +351,44 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                     # Row 1: Two columns for Matched and Gaps
                     col_a, col_b = st.columns(2, gap="large")
 
-                    # Matched Skills
+                    # --- FIXED CONTAINER 1: Skills Matched (100% HTML in one go) ---
                     with col_a:
-                        st.markdown('<div class="result-box">', unsafe_allow_html=True)
-                        st.markdown("#### ✅ Skills Matched")
                         if matched:
                             chips = "".join([f'<span class="chip chip-green">{s}</span>' for s in matched])
-                            st.markdown(f'<div>{chips}</div>', unsafe_allow_html=True)
                         else:
-                            st.write("No matched skills found.")
-                        st.markdown('</div>', unsafe_allow_html=True)
+                            chips = "<span style='color:#94a3b8;'>No matched skills found.</span>"
+                        
+                        matched_html = f"""
+                        <div class="result-box">
+                            <h4>✅ Skills Matched</h4>
+                            <div>
+                                {chips}
+                            </div>
+                        </div>
+                        """
+                        st.markdown(matched_html, unsafe_allow_html=True)
 
-                    # Identified Gaps
+                    # --- FIXED CONTAINER 2: Identified Gaps (100% HTML in one go) ---
                     with col_b:
-                        st.markdown('<div class="result-box">', unsafe_allow_html=True)
-                        st.markdown("#### ❌ Identified Gaps")
                         if missing:
                             chips = "".join([f'<span class="chip chip-red">{s}</span>' for s in missing])
-                            st.markdown(f'<div>{chips}</div>', unsafe_allow_html=True)
                         else:
-                            st.write("No gaps! Perfect match.")
-                        st.markdown('</div>', unsafe_allow_html=True)
+                            chips = "<span style='color:#22c55e; font-weight:600;'>No gaps found! Perfect match.</span>"
+                        
+                        gaps_html = f"""
+                        <div class="result-box">
+                            <h4>❌ Identified Gaps</h4>
+                            <div>
+                                {chips}
+                            </div>
+                        </div>
+                        """
+                        st.markdown(gaps_html, unsafe_allow_html=True)
 
                     # Row 2: Score + Advice
                     st.markdown("---")
                     st.markdown("### 💡 Personalized Advice")
 
-                    # Score display
                     col_score, col_advice = st.columns([1, 3])
 
                     with col_score:
@@ -472,17 +396,16 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                         st.progress(match_percentage / 100)
 
                     with col_advice:
-                        # Determine advice based on mode and score
                         if mode_str == "Candidate":
                             if match_percentage >= 80:
                                 advice = "🌟 Excellent match! You are highly qualified for this role. Proceed with confidence."
                             elif match_percentage >= 50:
-                                advice = f"📈 Good foundation. Consider upskilling in these areas: {', '.join(missing[:3]) if missing else 'None'}."
+                                advice = f"📈 Good foundation. Consider upskilling in: {', '.join(missing[:3]) if missing else 'None'}."
                             elif match_percentage >= 30:
                                 advice = f"⚠️ Significant gaps. Focus on learning: {', '.join(missing[:5])}. Take relevant courses."
                             else:
                                 advice = f"🔄 Career pivot needed. Missing: {', '.join(missing[:5])}. Explore entry-level roles."
-                        else:  # Recruiter
+                        else:
                             if match_percentage >= 70:
                                 advice = "📞 Shortlist: Strong match. Proceed to interview."
                             elif match_percentage >= 40:
@@ -495,17 +418,17 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                 else:
                     st.warning("Could not extract meaningful text from the PDFs.")
             else:
-                st.error("Failed to extract text. Please ensure the PDFs are text-based (not scanned images).")
+                st.error("Failed to extract text. Please ensure the PDFs are text-based.")
     else:
         st.warning("⚠️ Please upload both a CV and a Job Description.")
 
-# ------------------ FOOTER ------------------
+# ------------------ FOOTER (Now with Beautiful Teal Gradient) ------------------
 st.markdown("""
 <div class="footer">
     <div class="footer-left">
         🔍 AI SkillBridge &mdash; Intelligent CV Screening
     </div>
-    <div class="footer-right">
+    <div>
         <a href="#">About Us</a>
         <a href="#">Subscriptions</a>
         <a href="#">Contact</a>
