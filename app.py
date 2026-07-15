@@ -22,9 +22,9 @@ st.markdown("""
     footer {visibility: hidden;}
     .stDeployButton {display: none;}
 
-    /* Global Font & Background */
+    /* Global Font & Background — warm cream */
     .stApp {
-        background: linear-gradient(135deg, #f5f7fa 0%, #e9edf5 100%);
+        background: linear-gradient(135deg, #F7F3EA 0%, #EFE7D6 100%);
         font-family: 'Inter', sans-serif;
     }
 
@@ -35,17 +35,17 @@ st.markdown("""
         max-width: 1200px;
     }
 
-    /* ----- HERO SECTION (The "CV & Glass" Search) ----- */
+    /* ----- HERO SECTION (Row of resumes, one highlighted under the glass) ----- */
     .hero-container {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1F4D3E 0%, #2E7D5B 100%);
         border-radius: 20px;
         padding: 2rem 3rem;
         margin-bottom: 2rem;
-        box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 10px 40px rgba(31, 77, 62, 0.35);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: white;
+        color: #F7F3EA;
         position: relative;
         overflow: hidden;
     }
@@ -54,47 +54,55 @@ st.markdown("""
         font-weight: 800;
         margin: 0;
         letter-spacing: -1px;
-        text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        color: #F7F3EA;
+        text-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
     .hero-text p {
         font-size: 1.2rem;
         opacity: 0.9;
         margin-top: 0.2rem;
         font-weight: 300;
+        color: #F7F3EA;
     }
-    
-    /* The "Magnifying Glass over CV" Illustration (Pure CSS/HTML) */
+
+    /* Row of resumes with one highlighted under the magnifying glass */
     .hero-illustration {
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 14px;
+        padding: 0 10px;
+    }
+    .doc-item {
+        font-size: 2.1rem;
+        opacity: 0.45;
+        filter: grayscale(60%);
+        transition: all 0.2s ease;
+    }
+    .doc-item.highlighted {
         position: relative;
-        width: 150px;
-        height: 150px;
+        opacity: 1;
+        filter: none;
+        transform: scale(1.35) translateY(-6px);
         background: rgba(255,255,255,0.15);
-        border-radius: 50%;
-        backdrop-filter: blur(5px);
-        border: 2px solid rgba(255,255,255,0.3);
-        box-shadow: 0 0 30px rgba(255,255,255,0.2);
+        border-radius: 16px;
+        padding: 10px 16px;
+        backdrop-filter: blur(4px);
+        border: 2px solid rgba(255,255,255,0.5);
+        box-shadow: 0 0 30px rgba(255,255,255,0.3);
     }
-    .hero-illustration .doc-icon {
-        font-size: 4.5rem;
-        filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
-        position: relative;
-        right: -10px;
-    }
-    .hero-illustration .glass-icon {
-        font-size: 3.5rem;
+    .doc-item.highlighted .glass-icon {
         position: absolute;
-        top: -5px;
-        right: -5px;
+        top: -16px;
+        right: -16px;
+        font-size: 1.5rem;
         transform: rotate(15deg);
-        filter: drop-shadow(0 0 15px rgba(255,215,0,0.6));
+        filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
         animation: float 3s ease-in-out infinite;
     }
     @keyframes float {
         0% { transform: rotate(10deg) translateY(0px); }
-        50% { transform: rotate(20deg) translateY(-10px); }
+        50% { transform: rotate(20deg) translateY(-8px); }
         100% { transform: rotate(10deg) translateY(0px); }
     }
 
@@ -102,68 +110,68 @@ st.markdown("""
     .branding {
         position: sticky;
         top: 0;
-        background: rgba(255,255,255,0.8);
+        background: rgba(255,255,255,0.85);
         backdrop-filter: blur(10px);
         padding: 0.8rem 2rem;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
+        border-bottom: 1px solid #E5DCC5;
         z-index: 999;
         display: flex;
         align-items: center;
         gap: 10px;
         font-weight: 700;
         font-size: 1.5rem;
-        color: #4a3f5c;
+        color: #2C2A24;
         margin-bottom: 1rem;
         border-radius: 0 0 20px 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        box-shadow: 0 4px 10px rgba(44,42,36,0.03);
     }
     .branding span {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
     /* Upload Cards */
     .upload-card {
-        background: white;
+        background: #FFFFFF;
         padding: 2rem 1.5rem;
         border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-        border: 1px solid rgba(0,0,0,0.02);
+        box-shadow: 0 8px 24px rgba(44,42,36,0.05);
+        border: 1px solid #E5DCC5;
         transition: transform 0.2s ease;
         height: 100%;
     }
     .upload-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 28px rgba(102, 126, 234, 0.10);
+        box-shadow: 0 12px 28px rgba(31, 77, 62, 0.12);
     }
 
     /* Buttons */
     .stButton button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white !important;
+        background: linear-gradient(135deg, #1F4D3E 0%, #2E7D5B 100%);
+        color: #F7F3EA !important;
         font-weight: 600 !important;
         border: none !important;
         border-radius: 12px !important;
         padding: 0.6rem 2rem !important;
-        box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 4px 14px rgba(31, 77, 62, 0.35);
         transition: all 0.2s ease;
         width: 100%;
     }
     .stButton button:hover {
         transform: scale(1.02);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        box-shadow: 0 8px 25px rgba(31, 77, 62, 0.5);
     }
 
     /* Radio Buttons (Mode Toggle) */
     .stRadio > div {
         display: flex;
         gap: 20px;
-        background: white;
+        background: #FFFFFF;
         padding: 10px 20px;
         border-radius: 40px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        border: 1px solid #f0f0f5;
+        box-shadow: 0 2px 8px rgba(44,42,36,0.04);
+        border: 1px solid #E5DCC5;
     }
     .stRadio label {
         background: transparent;
@@ -173,55 +181,55 @@ st.markdown("""
         transition: all 0.2s;
     }
     .stRadio label[data-baseweb="radio"]:has(input:checked) {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white !important;
-        box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
+        color: #F7F3EA !important;
+        box-shadow: 0 4px 10px rgba(31, 77, 62, 0.3);
     }
 
     /* Results Cards */
     .result-card {
-        background: white;
+        background: #FFFFFF;
         padding: 1.5rem 2rem;
         border-radius: 20px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.05);
-        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 8px 30px rgba(44,42,36,0.06);
+        border: 1px solid #E5DCC5;
         margin-top: 1.5rem;
     }
     .skill-chip-green {
-        background: #e8f5e9;
-        color: #2e7d32;
+        background: #E1EDE6;
+        color: #1F4D3E;
         padding: 6px 14px;
         border-radius: 30px;
         display: inline-block;
         margin: 4px 6px 4px 0;
         font-size: 0.85rem;
         font-weight: 500;
-        border: 1px solid #a5d6a7;
+        border: 1px solid #B9D9C7;
     }
     .skill-chip-red {
-        background: #ffebee;
-        color: #c62828;
+        background: #F3E4D8;
+        color: #8A4A2D;
         padding: 6px 14px;
         border-radius: 30px;
         display: inline-block;
         margin: 4px 6px 4px 0;
         font-size: 0.85rem;
         font-weight: 500;
-        border: 1px solid #ef9a9a;
+        border: 1px solid #E3C2A8;
     }
 
     /* Custom Progress Bar */
     .custom-progress {
         height: 12px;
         border-radius: 10px;
-        background: #e9ecef;
+        background: #EFE7D6;
         overflow: hidden;
         margin: 0.5rem 0 1rem 0;
     }
     .custom-progress-fill {
         height: 100%;
         border-radius: 10px;
-        background: linear-gradient(90deg, #667eea, #764ba2);
+        background: linear-gradient(90deg, #1F4D3E, #2E7D5B);
         width: 0%;
         transition: width 0.8s ease;
     }
@@ -229,19 +237,19 @@ st.markdown("""
     .match-score-number {
         font-size: 3.5rem;
         font-weight: 800;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         line-height: 1;
     }
-    
+
     /* Responsive */
     @media (max-width: 768px) {
         .hero-container { flex-direction: column; text-align: center; }
         .hero-text h1 { font-size: 2.2rem; }
-        .hero-illustration { width: 100px; height: 100px; margin-top: 1rem; }
-        .hero-illustration .doc-icon { font-size: 3rem; }
-        .hero-illustration .glass-icon { font-size: 2.5rem; }
+        .hero-illustration { margin-top: 1rem; gap: 8px; }
+        .doc-item { font-size: 1.6rem; }
+        .doc-item.highlighted { transform: scale(1.2) translateY(-4px); }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -294,23 +302,29 @@ def extract_text_from_pdf(uploaded_file):
 st.markdown("""
 <div class="branding">
     🔍 <span>AI SkillBridge</span> 
-    <span style="font-size:0.8rem; font-weight:400; color:gray; margin-left:auto;">v1.0</span>
+    <span style="font-size:0.8rem; font-weight:400; color:#6B6656; margin-left:auto;">v1.0</span>
 </div>
 """, unsafe_allow_html=True)
 
-# ------------------ HERO SECTION (CV + Glass) ------------------
+# ------------------ HERO SECTION (Row of resumes, one highlighted under the glass) ------------------
 st.markdown("""
 <div class="hero-container">
     <div class="hero-text">
         <h1>🤖 AI CV Screening</h1>
         <p>Intelligent Resume vs Job Description Matcher</p>
-        <p style="font-size:0.9rem; opacity:0.7; margin-top:0.5rem;">
+        <p style="font-size:0.9rem; opacity:0.75; margin-top:0.5rem;">
             📊 Powered by TF-IDF & Cosine Similarity
         </p>
     </div>
     <div class="hero-illustration">
-        <div class="doc-icon">📄</div>
-        <div class="glass-icon">🔍</div>
+        <div class="doc-item">📄</div>
+        <div class="doc-item">📄</div>
+        <div class="doc-item highlighted">
+            📄
+            <div class="glass-icon">🔍</div>
+        </div>
+        <div class="doc-item">📄</div>
+        <div class="doc-item">📄</div>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -347,36 +361,36 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
         with st.spinner("🔍 Analyzing..."):
             cv_text = extract_text_from_pdf(cv_file)
             jd_text = extract_text_from_pdf(jd_file)
-            
+
             if cv_text and jd_text:
                 # Clean texts
                 cv_cleaned = wash_text(cv_text)
                 jd_cleaned = wash_text(jd_text)
-                
+
                 if cv_cleaned and jd_cleaned:
                     # Transform
                     cv_vector = vectorizer.transform([cv_cleaned])
                     jd_vector = vectorizer.transform([jd_cleaned])
-                    
+
                     # Score
                     score = cosine_similarity(cv_vector, jd_vector)[0][0]
                     match_percentage = round(score * 100, 2)
-                    
+
                     # Extract skills from JD
                     jd_array = jd_vector.toarray().flatten()
                     word_score_pairs = sorted(zip(feature_names, jd_array), key=lambda x: x[1], reverse=True)
                     required_skills = [word for word, w_score in word_score_pairs if w_score > 0][:15]
-                    
+
                     cv_words = set(cv_cleaned.split())
                     matched = [skill for skill in required_skills if skill in cv_words]
                     missing = [skill for skill in required_skills if skill not in cv_words]
-                    
+
                     # --- DISPLAY RESULTS IN A BEAUTIFUL CARD ---
                     st.markdown('<div class="result-card">', unsafe_allow_html=True)
-                    
+
                     # Row 1: Score + Skills
                     res_col1, res_col2 = st.columns([1, 2])
-                    
+
                     with res_col1:
                         st.markdown(f"<div class='match-score-number'>{match_percentage}%</div>", unsafe_allow_html=True)
                         # Custom Progress Bar
@@ -385,7 +399,7 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                             <div class="custom-progress-fill" style="width: {min(match_percentage, 100)}%;"></div>
                         </div>
                         """, unsafe_allow_html=True)
-                        
+
                         mode_str = "Candidate" if "Candidate" in mode else "Recruiter"
                         if mode_str == "Candidate":
                             if match_percentage >= 80:
@@ -401,16 +415,16 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                                 st.warning("🧐 Review")
                             else:
                                 st.error("❌ Reject")
-                    
+
                     with res_col2:
                         st.markdown(f"**✅ Matched Skills ({len(matched)})**")
                         match_html = "".join([f"<span class='skill-chip-green'>{s}</span>" for s in matched]) if matched else "None"
                         st.markdown(match_html, unsafe_allow_html=True)
-                        
+
                         st.markdown(f"**❌ Missing Skills ({len(missing)})**")
                         miss_html = "".join([f"<span class='skill-chip-red'>{s}</span>" for s in missing]) if missing else "None"
                         st.markdown(miss_html, unsafe_allow_html=True)
-                    
+
                     # Row 2: Advice
                     st.divider()
                     if mode_str == "Candidate":
@@ -431,7 +445,7 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                         else:
                             decision = f"❌ REJECT: Not suitable. Missing: {', '.join(missing[:5])}."
                         st.info(f"⚖️ **Decision:** {decision}")
-                    
+
                     st.markdown('</div>', unsafe_allow_html=True)
                 else:
                     st.warning("Could not extract meaningful text.")
@@ -443,6 +457,6 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
 # ------------------ FOOTER ------------------
 st.divider()
 st.markdown(
-    "<p style='text-align: center; color: gray; font-size: 0.8rem;'>Built with ❤️ using Streamlit, Scikit-Learn, and PDFPlumber</p>",
+    "<p style='text-align: center; color: #6B6656; font-size: 0.8rem;'>Built with ❤️ using Streamlit, Scikit-Learn, and PDFPlumber</p>",
     unsafe_allow_html=True
 )
