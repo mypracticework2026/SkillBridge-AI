@@ -6,7 +6,7 @@ import nltk
 import io
 from sklearn.metrics.pairwise import cosine_similarity
 
-# ------------------ PAGE CONFIG (Must be first) ------------------
+# ------------------ PAGE CONFIG ------------------
 st.set_page_config(
     page_title="AI SkillBridge - CV Screening",
     page_icon="🔍",
@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ------------------ CUSTOM CSS INJECTION ------------------
+# ------------------ CUSTOM CSS (with changes) ------------------
 st.markdown("""
 <style>
     /* Hide default Streamlit elements */
@@ -22,20 +22,18 @@ st.markdown("""
     footer {visibility: hidden;}
     .stDeployButton {display: none;}
 
-    /* Global Font & Background — warm cream */
     .stApp {
         background: linear-gradient(135deg, #F7F3EA 0%, #EFE7D6 100%);
         font-family: 'Inter', sans-serif;
     }
 
-    /* Main Container Padding */
     .main .block-container {
         padding-top: 0rem;
         padding-bottom: 0rem;
         max-width: 1200px;
     }
 
-    /* ----- HERO SECTION (Row of resumes, one highlighted under the glass) ----- */
+    /* ----- HERO SECTION (Green box) ----- */
     .hero-container {
         background: linear-gradient(135deg, #1F4D3E 0%, #2E7D5B 100%);
         border-radius: 20px;
@@ -56,13 +54,6 @@ st.markdown("""
         letter-spacing: -1px;
         color: #F7F3EA;
         text-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    .hero-text p {
-        font-size: 1.2rem;
-        opacity: 0.9;
-        margin-top: 0.2rem;
-        font-weight: 300;
-        color: #F7F3EA;
     }
 
     /* Row of resumes with one highlighted under the magnifying glass */
@@ -104,31 +95,6 @@ st.markdown("""
         0% { transform: rotate(10deg) translateY(0px); }
         50% { transform: rotate(20deg) translateY(-8px); }
         100% { transform: rotate(10deg) translateY(0px); }
-    }
-
-    /* Branding Top Left */
-    .branding {
-        position: sticky;
-        top: 0;
-        background: rgba(255,255,255,0.85);
-        backdrop-filter: blur(10px);
-        padding: 0.8rem 2rem;
-        border-bottom: 1px solid #E5DCC5;
-        z-index: 999;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 700;
-        font-size: 1.5rem;
-        color: #2C2A24;
-        margin-bottom: 1rem;
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 4px 10px rgba(44,42,36,0.03);
-    }
-    .branding span {
-        background: linear-gradient(135deg, #1F4D3E, #2E7D5B);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
     }
 
     /* Upload Cards */
@@ -243,7 +209,6 @@ st.markdown("""
         line-height: 1;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .hero-container { flex-direction: column; text-align: center; }
         .hero-text h1 { font-size: 2.2rem; }
@@ -254,7 +219,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ------------------ DOWNLOAD NLTK DATA ------------------
+# ------------------ NLTK, MODEL, HELPERS ------------------
 @st.cache_resource
 def load_nltk():
     nltk.download('stopwords')
@@ -262,7 +227,6 @@ def load_nltk():
 
 stop_words = set(load_nltk())
 
-# ------------------ LOAD THE SAVED MODEL ------------------
 @st.cache_resource
 def load_model():
     try:
@@ -277,7 +241,6 @@ model = load_model()
 vectorizer = model['vectorizer']
 feature_names = vectorizer.get_feature_names_out()
 
-# ------------------ TEXT CLEANING ------------------
 def wash_text(raw_text):
     if not raw_text:
         return ""
@@ -298,23 +261,12 @@ def extract_text_from_pdf(uploaded_file):
     except:
         return ""
 
-# ------------------ TOP LEFT BRANDING ------------------
-st.markdown("""
-<div class="branding">
-    🔍 <span>AI SkillBridge</span> 
-    <span style="font-size:0.8rem; font-weight:400; color:#6B6656; margin-left:auto;">v1.0</span>
-</div>
-""", unsafe_allow_html=True)
-
-# ------------------ HERO SECTION (Row of resumes, one highlighted under the glass) ------------------
+# ================== MODIFIED HERO (no branding bar) ==================
 st.markdown("""
 <div class="hero-container">
     <div class="hero-text">
-        <h1>🤖 AI CV Screening</h1>
-        <p>Intelligent Resume vs Job Description Matcher</p>
-        <p style="font-size:0.9rem; opacity:0.75; margin-top:0.5rem;">
-            📊 Powered by TF-IDF & Cosine Similarity
-        </p>
+        <h1>AI SkillBridge</h1>
+        <!-- subtitle and 'powered by' removed -->
     </div>
     <div class="hero-illustration">
         <div class="doc-item">📄</div>
@@ -329,7 +281,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ------------------ UPLOAD SECTION ------------------
+# ------------------ UPLOAD, MODE, ANALYZE (unchanged) ------------------
 col1, col2 = st.columns(2, gap="large")
 
 with col1:
@@ -348,7 +300,6 @@ with col2:
         st.success(f"✅ {jd_file.name} uploaded")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ------------------ MODE & ANALYZE ------------------
 mode = st.radio(
     "👤 Select View",
     ["🎓 Candidate Mode (Upskilling Advice)", "💼 Recruiter Mode (Hiring Decision)"],
@@ -363,20 +314,16 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
             jd_text = extract_text_from_pdf(jd_file)
 
             if cv_text and jd_text:
-                # Clean texts
                 cv_cleaned = wash_text(cv_text)
                 jd_cleaned = wash_text(jd_text)
 
                 if cv_cleaned and jd_cleaned:
-                    # Transform
                     cv_vector = vectorizer.transform([cv_cleaned])
                     jd_vector = vectorizer.transform([jd_cleaned])
 
-                    # Score
                     score = cosine_similarity(cv_vector, jd_vector)[0][0]
                     match_percentage = round(score * 100, 2)
 
-                    # Extract skills from JD
                     jd_array = jd_vector.toarray().flatten()
                     word_score_pairs = sorted(zip(feature_names, jd_array), key=lambda x: x[1], reverse=True)
                     required_skills = [word for word, w_score in word_score_pairs if w_score > 0][:15]
@@ -385,15 +332,11 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                     matched = [skill for skill in required_skills if skill in cv_words]
                     missing = [skill for skill in required_skills if skill not in cv_words]
 
-                    # --- DISPLAY RESULTS IN A BEAUTIFUL CARD ---
                     st.markdown('<div class="result-card">', unsafe_allow_html=True)
-
-                    # Row 1: Score + Skills
                     res_col1, res_col2 = st.columns([1, 2])
 
                     with res_col1:
                         st.markdown(f"<div class='match-score-number'>{match_percentage}%</div>", unsafe_allow_html=True)
-                        # Custom Progress Bar
                         st.markdown(f"""
                         <div class="custom-progress">
                             <div class="custom-progress-fill" style="width: {min(match_percentage, 100)}%;"></div>
@@ -425,7 +368,6 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
                         miss_html = "".join([f"<span class='skill-chip-red'>{s}</span>" for s in missing]) if missing else "None"
                         st.markdown(miss_html, unsafe_allow_html=True)
 
-                    # Row 2: Advice
                     st.divider()
                     if mode_str == "Candidate":
                         if match_percentage >= 80:
@@ -454,7 +396,6 @@ if st.button("🚀 Analyze Match", type="primary", use_container_width=True):
     else:
         st.warning("⚠️ Please upload both a CV and a Job Description.")
 
-# ------------------ FOOTER ------------------
 st.divider()
 st.markdown(
     "<p style='text-align: center; color: #6B6656; font-size: 0.8rem;'>Built with ❤️ using Streamlit, Scikit-Learn, and PDFPlumber</p>",
